@@ -10,7 +10,7 @@ public class PieceMovesCalculator {
     }*/
 
     public static Collection<ChessMove> chessMoveCollection(ChessBoard board, ChessPosition position){
-        Collection<ChessPosition> collection = new ArrayList<>();
+        Collection<ChessMove> collection = new ArrayList<>();
 
         ChessPiece piece = board.getPiece(position);
 
@@ -29,8 +29,8 @@ public class PieceMovesCalculator {
         return collection;
     }
 
-    private static Collection<ChessPosition> pawnCalculator(ChessBoard board, ChessPosition firstPos, ChessPiece piece){
-        Collection<ChessPosition> collection = new ArrayList<>();
+    private static Collection<ChessMove> pawnCalculator(ChessBoard board, ChessPosition firstPos, ChessPiece piece){
+        Collection<ChessMove> collection = new ArrayList<>();
         ChessPosition checkedPos;
 
         if(piece.getTeamColor() == ChessGame.TeamColor.WHITE){
@@ -38,11 +38,11 @@ public class PieceMovesCalculator {
                 // basically, if the piece hasn't moved yet and there isn't another piece in the way, you can move 2.
             if(firstPos.getRow() == 1 && board.getPiece(new ChessPosition(firstPos.getRow() + 1, firstPos.getColumn())) == null){
                 checkedPos = checkUpDown(board, firstPos, piece, 2);
-                if(checkedPos != firstPos) collection.add(checkedPos);
+                if(checkedPos != firstPos) collection.add(new ChessMove(firstPos, checkedPos, piece.getPieceType()));
             }
             // moving forward 1 space (white)
             checkedPos = checkUpDown(board, firstPos, piece, 1);
-            if(checkedPos != firstPos) collection.add(checkedPos);
+            if(checkedPos != firstPos) collection.add(new ChessMove(firstPos, checkedPos, piece.getPieceType()));
 
             // capturing as white
             if(firstPos.getRow() <= 6){
@@ -50,7 +50,8 @@ public class PieceMovesCalculator {
                 if(firstPos.getColumn() >= 1){
                     ChessPiece killedPiece = board.getPiece(new ChessPosition(firstPos.getRow() + 1, firstPos.getColumn() - 1));
                     if(killedPiece != null && killedPiece.getTeamColor() != ChessGame.TeamColor.WHITE){
-                        collection.add(new ChessPosition(firstPos.getRow() + 1, firstPos.getColumn() - 1));
+                        // collection.add(new ChessPosition(firstPos.getRow() + 1, firstPos.getColumn() - 1));
+                        collection.add(new ChessMove(firstPos, new ChessPosition(firstPos.getRow() + 1, firstPos.getColumn() - 1), piece.getPieceType()));
                     }
                 }
 
@@ -58,7 +59,8 @@ public class PieceMovesCalculator {
                 if(firstPos.getColumn() <= 6){
                     ChessPiece killedPiece = board.getPiece(new ChessPosition(firstPos.getRow() + 1, firstPos.getColumn() + 1));
                     if(killedPiece != null && killedPiece.getTeamColor() != ChessGame.TeamColor.WHITE){
-                        collection.add(new ChessPosition(firstPos.getRow() + 1, firstPos.getColumn() + 1));
+                        // collection.add(new ChessPosition(firstPos.getRow() + 1, firstPos.getColumn() + 1));
+                        collection.add(new ChessMove(firstPos, new ChessPosition(firstPos.getRow() + 1, firstPos.getColumn() + 1), piece.getPieceType()));
                     }
                 }
 
@@ -73,11 +75,11 @@ public class PieceMovesCalculator {
                 // basically, if the piece hasn't moved yet and there isn't another piece in the way, you can move 2.
             if(firstPos.getRow() == 6 && board.getPiece(new ChessPosition(firstPos.getRow() + 1, firstPos.getColumn())) == null){
                 checkedPos = checkUpDown(board, firstPos, piece, -2);
-                if(checkedPos != firstPos) collection.add(checkedPos);
+                if(checkedPos != firstPos) collection.add(new ChessMove(firstPos, checkedPos, piece.getPieceType()));
             }
             // moving forward 1 space (black)
             checkedPos = checkUpDown(board, firstPos, piece, -1);
-            if(checkedPos != firstPos) collection.add(checkedPos);
+            if(checkedPos != firstPos) collection.add(new ChessMove(firstPos, checkedPos, piece.getPieceType()));
 
             // capturing as black
             if(firstPos.getRow() >= 1){
@@ -85,7 +87,8 @@ public class PieceMovesCalculator {
                 if(firstPos.getColumn() >= 1){
                     ChessPiece killedPiece = board.getPiece(new ChessPosition(firstPos.getRow() - 1, firstPos.getColumn() - 1));
                     if(killedPiece != null && killedPiece.getTeamColor() != ChessGame.TeamColor.BLACK){
-                        collection.add(new ChessPosition(firstPos.getRow() - 1, firstPos.getColumn() - 1));
+                        // collection.add(new ChessPosition(firstPos.getRow() - 1, firstPos.getColumn() - 1));
+                        collection.add(new ChessMove(firstPos, new ChessPosition(firstPos.getRow() - 1, firstPos.getColumn() - 1), piece.getPieceType()));
                     }
                 }
 
@@ -93,7 +96,8 @@ public class PieceMovesCalculator {
                 if(firstPos.getColumn() <= 6){
                     ChessPiece killedPiece = board.getPiece(new ChessPosition(firstPos.getRow() - 1, firstPos.getColumn() + 1));
                     if(killedPiece != null && killedPiece.getTeamColor() != ChessGame.TeamColor.BLACK){
-                        collection.add(new ChessPosition(firstPos.getRow() - 1, firstPos.getColumn() + 1));
+                        // collection.add(new ChessPosition(firstPos.getRow() - 1, firstPos.getColumn() + 1));
+                        collection.add(new ChessMove(firstPos, new ChessPosition(firstPos.getRow() - 1, firstPos.getColumn() + 1), piece.getPieceType()));
                     }
                 }
 
@@ -106,8 +110,8 @@ public class PieceMovesCalculator {
     }
 
 
-    private static Collection<ChessPosition> rookCalculator(ChessBoard board, ChessPosition firstPos, ChessPiece piece){
-        Collection<ChessPosition> collection = new ArrayList<>();
+    private static Collection<ChessMove> rookCalculator(ChessBoard board, ChessPosition firstPos, ChessPiece piece){
+        Collection<ChessMove> collection = new ArrayList<>();
 
         // check up
         for(int i = 0; i <= 7 - firstPos.getRow(); i++){
@@ -116,11 +120,11 @@ public class PieceMovesCalculator {
             if(board.getPiece(checkedPos) != null){
                 // if piece is enemy
                 if(board.getPiece(checkedPos).getTeamColor() != piece.getTeamColor()){
-                    collection.add(checkedPos);
+                    collection.add(new ChessMove(firstPos, checkedPos, piece.getPieceType()));
                 }
                 break;
             }
-            collection.add(checkedPos);
+            collection.add(new ChessMove(firstPos, checkedPos, piece.getPieceType()));
         }
 
         // check down
@@ -130,11 +134,11 @@ public class PieceMovesCalculator {
             if(board.getPiece(checkedPos) != null){
                 // if piece is enemy
                 if(board.getPiece(checkedPos).getTeamColor() != piece.getTeamColor()){
-                    collection.add(checkedPos);
+                    collection.add(new ChessMove(firstPos, checkedPos, piece.getPieceType()));
                 }
                 break;
             }
-            collection.add(checkedPos);
+            collection.add(new ChessMove(firstPos, checkedPos, piece.getPieceType()));
         }
 
         // check left
@@ -144,11 +148,11 @@ public class PieceMovesCalculator {
             if(board.getPiece(checkedPos) != null){
                 // if piece is enemy
                 if(board.getPiece(checkedPos).getTeamColor() != piece.getTeamColor()) {
-                    collection.add(checkedPos);
+                    collection.add(new ChessMove(firstPos, checkedPos, piece.getPieceType()));
                 }
                 break;
             }
-            collection.add(checkedPos);
+            collection.add(new ChessMove(firstPos, checkedPos, piece.getPieceType()));
         }
 
         // check right
@@ -158,11 +162,11 @@ public class PieceMovesCalculator {
             if(board.getPiece(checkedPos) != null){
                 // if piece is enemy
                 if(board.getPiece(checkedPos).getTeamColor() != piece.getTeamColor()){
-                    collection.add(checkedPos);
+                    collection.add(new ChessMove(firstPos, checkedPos, piece.getPieceType()));
                 }
                 break;
             }
-            collection.add(checkedPos);
+            collection.add(new ChessMove(firstPos, checkedPos, piece.getPieceType()));
         }
 
 
@@ -170,8 +174,8 @@ public class PieceMovesCalculator {
     }
 
 
-    private static Collection<ChessPosition> bishopCalculator(ChessBoard board, ChessPosition firstPos, ChessPiece piece){
-        Collection<ChessPosition> collection = new ArrayList<>();
+    private static Collection<ChessMove> bishopCalculator(ChessBoard board, ChessPosition firstPos, ChessPiece piece){
+        Collection<ChessMove> collection = new ArrayList<>();
 
         // check up-right
         for(int i = 1; i < 8; i++){
@@ -179,7 +183,7 @@ public class PieceMovesCalculator {
             if(checkedPos == firstPos){
                 break;
             }
-            collection.add(checkedPos);
+            collection.add(new ChessMove(firstPos, checkedPos, piece.getPieceType()));
         }
 
         // check down-left
@@ -188,7 +192,7 @@ public class PieceMovesCalculator {
             if(checkedPos == firstPos){
                 break;
             }
-            collection.add(checkedPos);
+            collection.add(new ChessMove(firstPos, checkedPos, piece.getPieceType()));
         }
 
         // check up-left
@@ -197,7 +201,7 @@ public class PieceMovesCalculator {
             if(checkedPos == firstPos){
                 break;
             }
-            collection.add(checkedPos);
+            collection.add(new ChessMove(firstPos, checkedPos, piece.getPieceType()));
         }
 
         // check down-right
@@ -206,7 +210,7 @@ public class PieceMovesCalculator {
             if(checkedPos == firstPos){
                 break;
             }
-            collection.add(checkedPos);
+            collection.add(new ChessMove(firstPos, checkedPos, piece.getPieceType()));
         }
 
         return collection;
@@ -214,8 +218,8 @@ public class PieceMovesCalculator {
     }
 
 
-    private static Collection<ChessPosition> queenCalculator(ChessBoard board, ChessPosition firstPos, ChessPiece piece){
-        Collection<ChessPosition> collection = new ArrayList<>();
+    private static Collection<ChessMove> queenCalculator(ChessBoard board, ChessPosition firstPos, ChessPiece piece){
+        Collection<ChessMove> collection = new ArrayList<>();
 
         collection.addAll(rookCalculator(board, firstPos, piece));
         collection.addAll(bishopCalculator(board, firstPos, piece));
@@ -224,39 +228,39 @@ public class PieceMovesCalculator {
     }
 
 
-    private static Collection<ChessPosition> kingCalculator(ChessBoard board, ChessPosition firstPos, ChessPiece piece){
-        Collection<ChessPosition> collection = new ArrayList<>();
+    private static Collection<ChessMove> kingCalculator(ChessBoard board, ChessPosition firstPos, ChessPiece piece){
+        Collection<ChessMove> collection = new ArrayList<>();
 
         ChessPosition checkedPos;
 
         checkedPos = checkUpDown(board, firstPos, piece, 1);
-        if(checkedPos != firstPos) collection.add(checkedPos);
+        if(checkedPos != firstPos) collection.add(new ChessMove(firstPos, checkedPos, piece.getPieceType()));
         checkedPos = checkUpDown(board, firstPos, piece, -1);
-        if(checkedPos != firstPos) collection.add(checkedPos);
+        if(checkedPos != firstPos) collection.add(new ChessMove(firstPos, checkedPos, piece.getPieceType()));
         checkedPos = checkLeftRight(board, firstPos, piece, 1);
-        if(checkedPos != firstPos) collection.add(checkedPos);
+        if(checkedPos != firstPos) collection.add(new ChessMove(firstPos, checkedPos, piece.getPieceType()));
         checkedPos = checkLeftRight(board, firstPos, piece, -1);
-        if(checkedPos != firstPos) collection.add(checkedPos);
+        if(checkedPos != firstPos) collection.add(new ChessMove(firstPos, checkedPos, piece.getPieceType()));
         checkedPos = checkDiagUpLeftDownRight(board, firstPos, piece, 1);
-        if(checkedPos != firstPos) collection.add(checkedPos);
+        if(checkedPos != firstPos) collection.add(new ChessMove(firstPos, checkedPos, piece.getPieceType()));
         checkedPos = checkDiagUpLeftDownRight(board, firstPos, piece, -1);
-        if(checkedPos != firstPos) collection.add(checkedPos);
+        if(checkedPos != firstPos) collection.add(new ChessMove(firstPos, checkedPos, piece.getPieceType()));
         checkedPos = checkDiagUpRightDownLeft(board, firstPos, piece, 1);
-        if(checkedPos != firstPos) collection.add(checkedPos);
+        if(checkedPos != firstPos) collection.add(new ChessMove(firstPos, checkedPos, piece.getPieceType()));
         checkedPos = checkDiagUpRightDownLeft(board, firstPos, piece, -1);
-        if(checkedPos != firstPos) collection.add(checkedPos);
+        if(checkedPos != firstPos) collection.add(new ChessMove(firstPos, checkedPos, piece.getPieceType()));
 
         return collection;
 
     }
 
 
-    private static Collection<ChessPosition> knightCalculator(ChessBoard board, ChessPosition firstPos, ChessPiece piece){
-        Collection<ChessPosition> collection = new ArrayList<>();
+    private static Collection<ChessMove> knightCalculator(ChessBoard board, ChessPosition firstPos, ChessPiece piece){
+        Collection<ChessMove> collection = new ArrayList<>();
 
         for(int i = 1; i <= 8; i++){
             ChessPosition checkedPos = checkKnightDirections(board, firstPos, piece, i);
-            if(checkedPos != firstPos) collection.add(checkedPos);
+            if(checkedPos != firstPos) collection.add(new ChessMove(firstPos, checkedPos, piece.getPieceType()));
         }
 
         return collection;
