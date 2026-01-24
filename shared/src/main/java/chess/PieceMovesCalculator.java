@@ -45,7 +45,18 @@ public class PieceMovesCalculator {
         if(piece.getTeamColor() == ChessGame.TeamColor.WHITE){
             ChessPosition upOne = offset(firstPos, 1, 0);
             if(upOne != null && board.getPiece(upOne) == null){
-                collection.add(new ChessMove(firstPos, upOne, null));
+
+
+                // promotions
+                if(upOne.getRow() == 8){
+                    collection.add(new ChessMove(firstPos, upOne, ChessPiece.PieceType.QUEEN));
+                    collection.add(new ChessMove(firstPos, upOne, ChessPiece.PieceType.KNIGHT));
+                    collection.add(new ChessMove(firstPos, upOne, ChessPiece.PieceType.BISHOP));
+                    collection.add(new ChessMove(firstPos, upOne, ChessPiece.PieceType.ROOK));
+                } else{
+                    collection.add(new ChessMove(firstPos, upOne, null));
+                }
+
                 if(firstPos.getRow() == 2){
                     ChessPosition upTwo = offset(firstPos, 2, 0);
                     if(upTwo != null && board.getPiece(upTwo) == null){
@@ -60,14 +71,30 @@ public class PieceMovesCalculator {
         ChessPosition upLeft = offset(firstPos, 1, -1);
         if(upLeft != null){
             if (board.getPiece(upLeft) != null && board.getPiece(upLeft).getTeamColor() == ChessGame.TeamColor.BLACK){
-                collection.add(new ChessMove(firstPos, upLeft, null));
+                // promotions
+                if(upLeft.getRow() == 8){
+                    collection.add(new ChessMove(firstPos, upLeft, ChessPiece.PieceType.QUEEN));
+                    collection.add(new ChessMove(firstPos, upLeft, ChessPiece.PieceType.KNIGHT));
+                    collection.add(new ChessMove(firstPos, upLeft, ChessPiece.PieceType.BISHOP));
+                    collection.add(new ChessMove(firstPos, upLeft, ChessPiece.PieceType.ROOK));
+                }else {
+                    collection.add(new ChessMove(firstPos, upLeft, null));
+                }
             }
         }
         // diagonal right
         ChessPosition upRight = offset(firstPos, 1, 1);
         if(upRight != null){
             if(board.getPiece(upRight) != null && board.getPiece(upRight).getTeamColor() == ChessGame.TeamColor.BLACK){
-                collection.add(new ChessMove(firstPos, upRight, null));
+                // promotions
+                if(upRight.getRow() == 8){
+                    collection.add(new ChessMove(firstPos, upRight, ChessPiece.PieceType.QUEEN));
+                    collection.add(new ChessMove(firstPos, upRight, ChessPiece.PieceType.KNIGHT));
+                    collection.add(new ChessMove(firstPos, upRight, ChessPiece.PieceType.BISHOP));
+                    collection.add(new ChessMove(firstPos, upRight, ChessPiece.PieceType.ROOK));
+                }else {
+                    collection.add(new ChessMove(firstPos, upRight, null));
+                }
             }
         }
 
@@ -76,7 +103,18 @@ public class PieceMovesCalculator {
         if(piece.getTeamColor() == ChessGame.TeamColor.BLACK){
             ChessPosition downOne = offset(firstPos, -1, 0);
             if(downOne != null && board.getPiece(downOne) == null){
-                collection.add(new ChessMove(firstPos, downOne, null));
+
+                // promotions
+                if(downOne.getRow() == 1){
+                    collection.add(new ChessMove(firstPos, downOne, ChessPiece.PieceType.QUEEN));
+                    collection.add(new ChessMove(firstPos, downOne, ChessPiece.PieceType.KNIGHT));
+                    collection.add(new ChessMove(firstPos, downOne, ChessPiece.PieceType.BISHOP));
+                    collection.add(new ChessMove(firstPos, downOne, ChessPiece.PieceType.ROOK));
+                } else{
+                    collection.add(new ChessMove(firstPos, downOne, null));
+                }
+
+
                 if(firstPos.getRow() == 7){
                     ChessPosition downTwo = offset(firstPos, -2, 0);
                     if(downTwo != null && board.getPiece(downTwo) == null){
@@ -91,7 +129,15 @@ public class PieceMovesCalculator {
         ChessPosition downLeft = offset(firstPos, -1, -1);
         if(downLeft != null){
             if (board.getPiece(downLeft) != null && board.getPiece(downLeft).getTeamColor() == ChessGame.TeamColor.WHITE){
-                collection.add(new ChessMove(firstPos, downLeft, null));
+                // promotions
+                if(downLeft.getRow() == 1){
+                    collection.add(new ChessMove(firstPos, downLeft, ChessPiece.PieceType.QUEEN));
+                    collection.add(new ChessMove(firstPos, downLeft, ChessPiece.PieceType.KNIGHT));
+                    collection.add(new ChessMove(firstPos, downLeft, ChessPiece.PieceType.BISHOP));
+                    collection.add(new ChessMove(firstPos, downLeft, ChessPiece.PieceType.ROOK));
+                }else {
+                    collection.add(new ChessMove(firstPos, downLeft, null));
+                }
             }
         }
 
@@ -99,9 +145,19 @@ public class PieceMovesCalculator {
         ChessPosition downRight = offset(firstPos, -1, 1);
         if(downRight != null){
             if(board.getPiece(downRight) != null && board.getPiece(downRight).getTeamColor() == ChessGame.TeamColor.WHITE){
-                collection.add(new ChessMove(firstPos, downRight, null));
+                // promotions
+                if(downRight.getRow() == 1){
+                    collection.add(new ChessMove(firstPos, downRight, ChessPiece.PieceType.QUEEN));
+                    collection.add(new ChessMove(firstPos, downRight, ChessPiece.PieceType.KNIGHT));
+                    collection.add(new ChessMove(firstPos, downRight, ChessPiece.PieceType.BISHOP));
+                    collection.add(new ChessMove(firstPos, downRight, ChessPiece.PieceType.ROOK));
+                }else {
+                    collection.add(new ChessMove(firstPos, downRight, null));
+                }
             }
         }
+
+
 
         return collection;
     }
