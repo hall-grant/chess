@@ -4,12 +4,32 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 public class PieceMovesCalculator {
+    /*
+    public PieceMovesCalculator(ChessBoard board, ChessPosition position){
 
-    public Collection<ChessMove> pieceMoves(){
+    }*/
 
+    public static Collection<ChessMove> chessMoveCollection(ChessBoard board, ChessPosition position){
+        Collection<ChessPosition> collection = new ArrayList<>();
+
+        ChessPiece piece = board.getPiece(position);
+
+        // Collection<ChessPosition> pawnCol = pawnCalculator(board, position, piece);
+
+        if      (piece.getPieceType() == ChessPiece.PieceType.PAWN) collection.addAll(pawnCalculator(board, position, piece));
+        else if (piece.getPieceType() == ChessPiece.PieceType.ROOK) collection.addAll(rookCalculator(board, position, piece));
+        else if (piece.getPieceType() == ChessPiece.PieceType.BISHOP) collection.addAll(bishopCalculator(board, position, piece));
+        else if (piece.getPieceType() == ChessPiece.PieceType.QUEEN) collection.addAll(queenCalculator(board, position, piece));
+        else if (piece.getPieceType() == ChessPiece.PieceType.KING) collection.addAll(kingCalculator(board, position, piece));
+        else if (piece.getPieceType() == ChessPiece.PieceType.KNIGHT) collection.addAll(knightCalculator(board, position, piece));
+        else{
+            System.out.println("Something has gone horribly, horribly wrong.\nInvalid pieceType.");
+        }
+
+        return collection;
     }
 
-    private Collection<ChessPosition> pawnCalculator(ChessBoard board, ChessPosition firstPos, ChessPiece piece){
+    private static Collection<ChessPosition> pawnCalculator(ChessBoard board, ChessPosition firstPos, ChessPiece piece){
         Collection<ChessPosition> collection = new ArrayList<>();
         ChessPosition checkedPos;
 
@@ -86,7 +106,7 @@ public class PieceMovesCalculator {
     }
 
 
-    private Collection<ChessPosition> rookCalculator(ChessBoard board, ChessPosition firstPos, ChessPiece piece){
+    private static Collection<ChessPosition> rookCalculator(ChessBoard board, ChessPosition firstPos, ChessPiece piece){
         Collection<ChessPosition> collection = new ArrayList<>();
 
         // check up
@@ -150,7 +170,7 @@ public class PieceMovesCalculator {
     }
 
 
-    private Collection<ChessPosition> bishopCalculator(ChessBoard board, ChessPosition firstPos, ChessPiece piece){
+    private static Collection<ChessPosition> bishopCalculator(ChessBoard board, ChessPosition firstPos, ChessPiece piece){
         Collection<ChessPosition> collection = new ArrayList<>();
 
         // check up-right
@@ -194,7 +214,7 @@ public class PieceMovesCalculator {
     }
 
 
-    private Collection<ChessPosition> queenCalculator(ChessBoard board, ChessPosition firstPos, ChessPiece piece){
+    private static Collection<ChessPosition> queenCalculator(ChessBoard board, ChessPosition firstPos, ChessPiece piece){
         Collection<ChessPosition> collection = new ArrayList<>();
 
         collection.addAll(rookCalculator(board, firstPos, piece));
@@ -204,7 +224,7 @@ public class PieceMovesCalculator {
     }
 
 
-    private Collection<ChessPosition> kingCalculator(ChessBoard board, ChessPosition firstPos, ChessPiece piece){
+    private static Collection<ChessPosition> kingCalculator(ChessBoard board, ChessPosition firstPos, ChessPiece piece){
         Collection<ChessPosition> collection = new ArrayList<>();
 
         ChessPosition checkedPos;
@@ -231,7 +251,7 @@ public class PieceMovesCalculator {
     }
 
 
-    private Collection<ChessPosition> knightCalculator(ChessBoard board, ChessPosition firstPos, ChessPiece piece){
+    private static Collection<ChessPosition> knightCalculator(ChessBoard board, ChessPosition firstPos, ChessPiece piece){
         Collection<ChessPosition> collection = new ArrayList<>();
 
         for(int i = 1; i <= 8; i++){
@@ -245,7 +265,7 @@ public class PieceMovesCalculator {
 
 
 
-    private ChessPosition checkUpDown(ChessBoard board, ChessPosition firstPos, ChessPiece piece, int count){
+    private static ChessPosition checkUpDown(ChessBoard board, ChessPosition firstPos, ChessPiece piece, int count){
         // check bounds
         if(count > 0 && (firstPos.getColumn() + count) >= 8){
             return firstPos;
@@ -269,7 +289,7 @@ public class PieceMovesCalculator {
         }
     }
 
-    private ChessPosition checkLeftRight(ChessBoard board, ChessPosition firstPos, ChessPiece piece, int count){
+    private static ChessPosition checkLeftRight(ChessBoard board, ChessPosition firstPos, ChessPiece piece, int count){
         // check bounds
         if(count > 0 && (firstPos.getRow() + count) >= 8){
             return firstPos;
@@ -293,7 +313,7 @@ public class PieceMovesCalculator {
         }
     }
 
-    private ChessPosition checkDiagUpRightDownLeft(ChessBoard board, ChessPosition firstPos, ChessPiece piece, int count){
+    private static ChessPosition checkDiagUpRightDownLeft(ChessBoard board, ChessPosition firstPos, ChessPiece piece, int count){
         // check bounds
         if(count == 0){
             return firstPos;
@@ -317,7 +337,7 @@ public class PieceMovesCalculator {
         }
     }
 
-    private ChessPosition checkDiagUpLeftDownRight(ChessBoard board, ChessPosition firstPos, ChessPiece piece, int count){
+    private static ChessPosition checkDiagUpLeftDownRight(ChessBoard board, ChessPosition firstPos, ChessPiece piece, int count){
         // check bounds
         if(count == 0){
             return firstPos;
@@ -349,7 +369,7 @@ public class PieceMovesCalculator {
      * @param count which of the valid 8 spaces to move (1 for top-right, clockwise until 8 for top-left)
      * @return a valid position or the initial position if invalid.
      */
-    private ChessPosition checkKnightDirections(ChessBoard board, ChessPosition firstPos, ChessPiece piece, int count){
+    private static ChessPosition checkKnightDirections(ChessBoard board, ChessPosition firstPos, ChessPiece piece, int count){
         // check bounds
         if(count == 0){
             return firstPos;
