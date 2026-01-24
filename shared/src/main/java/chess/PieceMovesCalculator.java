@@ -1,14 +1,246 @@
 package chess;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 public class PieceMovesCalculator {
 
-    public Collection<ChessMove> pieceMoves{
+    public Collection<ChessMove> pieceMoves(){
+
+    }
+
+    private Collection<ChessPosition> pawnCalculator(ChessBoard board, ChessPosition firstPos, ChessPiece piece){
+        Collection<ChessPosition> collection = new ArrayList<>();
+        ChessPosition checkedPos;
+
+        if(piece.getTeamColor() == ChessGame.TeamColor.WHITE){
+            // moving forward 2 spaces on its first move (white)
+                // basically, if the piece hasn't moved yet and there isn't another piece in the way, you can move 2.
+            if(firstPos.getRow() == 1 && board.getPiece(new ChessPosition(firstPos.getRow() + 1, firstPos.getColumn())) == null){
+                checkedPos = checkUpDown(board, firstPos, piece, 2);
+                if(checkedPos != firstPos) collection.add(checkedPos);
+            }
+            // moving forward 1 space (white)
+            checkedPos = checkUpDown(board, firstPos, piece, 1);
+            if(checkedPos != firstPos) collection.add(checkedPos);
+
+            // capturing as white
+            if(firstPos.getRow() <= 6){
+                // capturing upper left piece
+                if(firstPos.getColumn() >= 1){
+                    ChessPiece killedPiece = board.getPiece(new ChessPosition(firstPos.getRow() + 1, firstPos.getColumn() - 1));
+                    if(killedPiece != null && killedPiece.getTeamColor() != ChessGame.TeamColor.WHITE){
+                        collection.add(new ChessPosition(firstPos.getRow() + 1, firstPos.getColumn() - 1));
+                    }
+                }
+
+                // capturing upper right piece
+                if(firstPos.getColumn() <= 6){
+                    ChessPiece killedPiece = board.getPiece(new ChessPosition(firstPos.getRow() + 1, firstPos.getColumn() + 1));
+                    if(killedPiece != null && killedPiece.getTeamColor() != ChessGame.TeamColor.WHITE){
+                        collection.add(new ChessPosition(firstPos.getRow() + 1, firstPos.getColumn() + 1));
+                    }
+                }
+
+                // En passant (but not right now)
+
+            }
+
+        }
+
+        else if(piece.getTeamColor() == ChessGame.TeamColor.BLACK){
+            // moving forward 2 spaces on its first move (black)
+                // basically, if the piece hasn't moved yet and there isn't another piece in the way, you can move 2.
+            if(firstPos.getRow() == 6 && board.getPiece(new ChessPosition(firstPos.getRow() + 1, firstPos.getColumn())) == null){
+                checkedPos = checkUpDown(board, firstPos, piece, -2);
+                if(checkedPos != firstPos) collection.add(checkedPos);
+            }
+            // moving forward 1 space (black)
+            checkedPos = checkUpDown(board, firstPos, piece, -1);
+            if(checkedPos != firstPos) collection.add(checkedPos);
+
+            // capturing as black
+            if(firstPos.getRow() >= 1){
+                // capturing lower left piece
+                if(firstPos.getColumn() >= 1){
+                    ChessPiece killedPiece = board.getPiece(new ChessPosition(firstPos.getRow() - 1, firstPos.getColumn() - 1));
+                    if(killedPiece != null && killedPiece.getTeamColor() != ChessGame.TeamColor.BLACK){
+                        collection.add(new ChessPosition(firstPos.getRow() - 1, firstPos.getColumn() - 1));
+                    }
+                }
+
+                // capturing lower right piece
+                if(firstPos.getColumn() <= 6){
+                    ChessPiece killedPiece = board.getPiece(new ChessPosition(firstPos.getRow() - 1, firstPos.getColumn() + 1));
+                    if(killedPiece != null && killedPiece.getTeamColor() != ChessGame.TeamColor.BLACK){
+                        collection.add(new ChessPosition(firstPos.getRow() - 1, firstPos.getColumn() + 1));
+                    }
+                }
+
+                // En passant (but not right now)
+
+            }
+        }
+
+        return collection;
+    }
+
+
+    private Collection<ChessPosition> rookCalculator(ChessBoard board, ChessPosition firstPos, ChessPiece piece){
+        Collection<ChessPosition> collection = new ArrayList<>();
+
+        // check up
+        for(int i = 0; i <= 7 - firstPos.getRow(); i++){
+            ChessPosition checkedPos = new ChessPosition(firstPos.getRow() + i + 1, firstPos.getColumn());
+            // if no piece is in the way
+            if(board.getPiece(checkedPos) != null){
+                // if piece is enemy
+                if(board.getPiece(checkedPos).getTeamColor() != piece.getTeamColor()){
+                    collection.add(checkedPos);
+                }
+                break;
+            }
+            collection.add(checkedPos);
+        }
+
+        // check down
+        for(int i = 0; i <= firstPos.getRow(); i++){
+            ChessPosition checkedPos = new ChessPosition(firstPos.getRow() - (i + 1), firstPos.getColumn());
+            // if no piece is in the way
+            if(board.getPiece(checkedPos) != null){
+                // if piece is enemy
+                if(board.getPiece(checkedPos).getTeamColor() != piece.getTeamColor()){
+                    collection.add(checkedPos);
+                }
+                break;
+            }
+            collection.add(checkedPos);
+        }
+
+        // check left
+        for(int i = 0; i <= firstPos.getColumn(); i++){
+            ChessPosition checkedPos = new ChessPosition(firstPos.getRow(), firstPos.getColumn() - (i + 1));
+            // if no piece is in the way
+            if(board.getPiece(checkedPos) != null){
+                // if piece is enemy
+                if(board.getPiece(checkedPos).getTeamColor() != piece.getTeamColor()) {
+                    collection.add(checkedPos);
+                }
+                break;
+            }
+            collection.add(checkedPos);
+        }
+
+        // check right
+        for(int i = 0; i <= 7 - firstPos.getColumn(); i++){
+            ChessPosition checkedPos = new ChessPosition(firstPos.getRow(), firstPos.getColumn() + i + 1);
+            // if no piece is in the way
+            if(board.getPiece(checkedPos) != null){
+                // if piece is enemy
+                if(board.getPiece(checkedPos).getTeamColor() != piece.getTeamColor()){
+                    collection.add(checkedPos);
+                }
+                break;
+            }
+            collection.add(checkedPos);
+        }
+
+
+        return collection;
+    }
+
+
+    private Collection<ChessPosition> bishopCalculator(ChessBoard board, ChessPosition firstPos, ChessPiece piece){
+        Collection<ChessPosition> collection = new ArrayList<>();
+
+        // check up-right
+        for(int i = 1; i < 8; i++){
+            ChessPosition checkedPos = checkDiagUpRightDownLeft(board, firstPos, piece, i);
+            if(checkedPos == firstPos){
+                break;
+            }
+            collection.add(checkedPos);
+        }
+
+        // check down-left
+        for(int i = 1; i < 8; i++){
+            ChessPosition checkedPos = checkDiagUpRightDownLeft(board, firstPos, piece, -i);
+            if(checkedPos == firstPos){
+                break;
+            }
+            collection.add(checkedPos);
+        }
+
+        // check up-left
+        for(int i = 1; i < 8; i++){
+            ChessPosition checkedPos = checkDiagUpLeftDownRight(board, firstPos, piece, i);
+            if(checkedPos == firstPos){
+                break;
+            }
+            collection.add(checkedPos);
+        }
+
+        // check down-right
+        for(int i = 1; i < 8; i++){
+            ChessPosition checkedPos = checkDiagUpLeftDownRight(board, firstPos, piece, -i);
+            if(checkedPos == firstPos){
+                break;
+            }
+            collection.add(checkedPos);
+        }
+
+        return collection;
 
     }
 
 
+    private Collection<ChessPosition> queenCalculator(ChessBoard board, ChessPosition firstPos, ChessPiece piece){
+        Collection<ChessPosition> collection = new ArrayList<>();
+
+        collection.addAll(rookCalculator(board, firstPos, piece));
+        collection.addAll(bishopCalculator(board, firstPos, piece));
+
+        return collection;
+    }
+
+
+    private Collection<ChessPosition> kingCalculator(ChessBoard board, ChessPosition firstPos, ChessPiece piece){
+        Collection<ChessPosition> collection = new ArrayList<>();
+
+        ChessPosition checkedPos;
+
+        checkedPos = checkUpDown(board, firstPos, piece, 1);
+        if(checkedPos != firstPos) collection.add(checkedPos);
+        checkedPos = checkUpDown(board, firstPos, piece, -1);
+        if(checkedPos != firstPos) collection.add(checkedPos);
+        checkedPos = checkLeftRight(board, firstPos, piece, 1);
+        if(checkedPos != firstPos) collection.add(checkedPos);
+        checkedPos = checkLeftRight(board, firstPos, piece, -1);
+        if(checkedPos != firstPos) collection.add(checkedPos);
+        checkedPos = checkDiagUpLeftDownRight(board, firstPos, piece, 1);
+        if(checkedPos != firstPos) collection.add(checkedPos);
+        checkedPos = checkDiagUpLeftDownRight(board, firstPos, piece, -1);
+        if(checkedPos != firstPos) collection.add(checkedPos);
+        checkedPos = checkDiagUpRightDownLeft(board, firstPos, piece, 1);
+        if(checkedPos != firstPos) collection.add(checkedPos);
+        checkedPos = checkDiagUpRightDownLeft(board, firstPos, piece, -1);
+        if(checkedPos != firstPos) collection.add(checkedPos);
+
+        return collection;
+
+    }
+
+
+    private Collection<ChessPosition> knightCalculator(ChessBoard board, ChessPosition firstPos, ChessPiece piece){
+        Collection<ChessPosition> collection = new ArrayList<>();
+
+        for(int i = 1; i <= 8; i++){
+            ChessPosition checkedPos = checkKnightDirections(board, firstPos, piece, i);
+            if(checkedPos != firstPos) collection.add(checkedPos);
+        }
+
+        return collection;
+    }
 
 
 
@@ -16,13 +248,10 @@ public class PieceMovesCalculator {
     private ChessPosition checkUpDown(ChessBoard board, ChessPosition firstPos, ChessPiece piece, int count){
         // check bounds
         if(count > 0 && (firstPos.getColumn() + count) >= 8){
-            throw new InvalidMoveException("Trying to move above bounds of the board.");
             return firstPos;
         } else if (count < 0 && (firstPos.getColumn() + count) <= 0){
-            throw new InvalidMoveException("Trying ot move below bounds of the board.");
             return firstPos;
         } else if (count == 0){
-            throw new InvalidMoveException("Move count can't be zero.");
             return firstPos;
         }
 
@@ -34,7 +263,7 @@ public class PieceMovesCalculator {
 
         ChessPiece killPiece = board.getPiece(finalPos); // piece isn't actually killed. I just couldn't come up with a better name.
         if(killPiece.getTeamColor() == piece.getTeamColor()){
-            throw new InvalidMoveException("Trying to move into a position occupied by same team");
+            return firstPos;
         } else {
             return finalPos;
         }
@@ -43,13 +272,10 @@ public class PieceMovesCalculator {
     private ChessPosition checkLeftRight(ChessBoard board, ChessPosition firstPos, ChessPiece piece, int count){
         // check bounds
         if(count > 0 && (firstPos.getRow() + count) >= 8){
-            throw new InvalidMoveException("Trying to move right of bounds of the board.");
             return firstPos;
         } else if (count < 0 && (firstPos.getRow() + count) <= 8){
-            throw new InvalidMoveException("Trying to move right of bounds of the board.");
             return firstPos;
         } else if (count == 0){
-            throw new InvalidMoveException("Move count can't be zero.");
             return firstPos;
         }
 
@@ -61,7 +287,7 @@ public class PieceMovesCalculator {
 
         ChessPiece killPiece = board.getPiece(finalPos); // piece isn't actually killed. I just couldn't come up with a better name.
         if(killPiece.getTeamColor() == piece.getTeamColor()){
-            throw new InvalidMoveException("Trying to move into a position occupied by same team");
+            return firstPos;
         } else{
             return finalPos;
         }
@@ -70,14 +296,14 @@ public class PieceMovesCalculator {
     private ChessPosition checkDiagUpRightDownLeft(ChessBoard board, ChessPosition firstPos, ChessPiece piece, int count){
         // check bounds
         if(count == 0){
-            throw new InvalidMoveException("Move count can't be zero.");
+            return firstPos;
         }
 
         ChessPosition finalPos = new ChessPosition(firstPos.getRow() + count,firstPos.getColumn() + count);
-        if(finalPos.getRow() >= 8) {throw new InvalidMoveException("Trying to move above bounds of the board.");}
-        else if (finalPos.getRow() < 0) {throw new InvalidMoveException("Trying to move below bounds of the board.");}
-        else if (finalPos.getColumn() >= 8) {throw new InvalidMoveException("Trying to move right of bounds of the board.");}
-        else if (finalPos.getColumn() < 0) {throw new InvalidMoveException("Trying to move left of bounds of the board.");}
+        if(finalPos.getRow() >= 8) {return firstPos;}
+        else if (finalPos.getRow() < 0) {return firstPos;}
+        else if (finalPos.getColumn() >= 8) {return firstPos;}
+        else if (finalPos.getColumn() < 0) {return firstPos;}
 
         if(board.getPiece(finalPos) == null){
             return finalPos;
@@ -85,7 +311,7 @@ public class PieceMovesCalculator {
 
         ChessPiece killPiece = board.getPiece(finalPos); // piece isn't actually killed. I just couldn't come up with a better name.
         if(killPiece.getTeamColor() == piece.getTeamColor()){
-            throw new InvalidMoveException("Trying to move into a position occupied by same team");
+            return firstPos;
         } else{
             return finalPos;
         }
@@ -94,14 +320,14 @@ public class PieceMovesCalculator {
     private ChessPosition checkDiagUpLeftDownRight(ChessBoard board, ChessPosition firstPos, ChessPiece piece, int count){
         // check bounds
         if(count == 0){
-            throw new InvalidMoveException("Move count can't be zero.");
+            return firstPos;
         }
 
         ChessPosition finalPos = new ChessPosition(firstPos.getRow() - count,firstPos.getColumn() + count);
-        if(finalPos.getRow() >= 8) {throw new InvalidMoveException("Trying to move above bounds of the board.");}
-        else if (finalPos.getRow() < 0) {throw new InvalidMoveException("Trying to move below bounds of the board.");}
-        else if (finalPos.getColumn() >= 8) {throw new InvalidMoveException("Trying to move right of bounds of the board.");}
-        else if (finalPos.getColumn() < 0) {throw new InvalidMoveException("Trying to move left of bounds of the board.");}
+        if(finalPos.getRow() >= 8) {return firstPos;}
+        else if (finalPos.getRow() < 0) {return firstPos;}
+        else if (finalPos.getColumn() >= 8) {return firstPos;}
+        else if (finalPos.getColumn() < 0) {return firstPos;}
 
         if(board.getPiece(finalPos) == null){
             return finalPos;
@@ -109,7 +335,7 @@ public class PieceMovesCalculator {
 
         ChessPiece killPiece = board.getPiece(finalPos); // piece isn't actually killed. I just couldn't come up with a better name.
         if(killPiece.getTeamColor() == piece.getTeamColor()){
-            throw new InvalidMoveException("Trying to move into a position occupied by same team");
+            return firstPos;
         } else{
             return finalPos;
         }
@@ -121,14 +347,14 @@ public class PieceMovesCalculator {
      * @param firstPos starting position of the piece
      * @param piece the piece to move
      * @param count which of the valid 8 spaces to move (1 for top-right, clockwise until 8 for top-left)
-     * @return a valid position
+     * @return a valid position or the initial position if invalid.
      */
     private ChessPosition checkKnightDirections(ChessBoard board, ChessPosition firstPos, ChessPiece piece, int count){
         // check bounds
         if(count == 0){
-            throw new InvalidMoveException("Move count can't be zero.");
+            return firstPos;
         } else if(count < 0 || count > 8){
-            throw new InvalidMoveException("Move count " + count + " out of bounds 1 - 8 for Knight pieces");
+            return firstPos;
         }
 
         ChessPosition finalPos;
@@ -161,13 +387,13 @@ public class PieceMovesCalculator {
                 finalPos = new ChessPosition(firstRow + 2, firstCol - 1);
                 break;
             default:
-                throw new InvalidMoveException("Move count invalid.");
+                return firstPos;
         }
 
-        if(finalPos.getRow() >= 8) {throw new InvalidMoveException("Trying to move above bounds of the board.");}
-        else if (finalPos.getRow() < 0) {throw new InvalidMoveException("Trying to move below bounds of the board.");}
-        else if (finalPos.getColumn() >= 8) {throw new InvalidMoveException("Trying to move right of bounds of the board.");}
-        else if (finalPos.getColumn() < 0) {throw new InvalidMoveException("Trying to move left of bounds of the board.");}
+        if(finalPos.getRow() >= 8) {return firstPos;}
+        else if (finalPos.getRow() < 0) {return firstPos;}
+        else if (finalPos.getColumn() >= 8) {return firstPos;}
+        else if (finalPos.getColumn() < 0) {return firstPos;}
 
         if(board.getPiece(finalPos) == null){
             return finalPos;
@@ -175,7 +401,7 @@ public class PieceMovesCalculator {
 
         ChessPiece killPiece = board.getPiece(finalPos); // piece isn't actually killed. I just couldn't come up with a better name.
         if(killPiece.getTeamColor() == piece.getTeamColor()){
-            throw new InvalidMoveException("Trying to move into a position occupied by same team");
+            return firstPos;
         } else{
             return finalPos;
         }
