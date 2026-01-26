@@ -35,7 +35,7 @@ public class ChessBoard {
      */
     public ChessPiece getPiece(ChessPosition position) {
         // IF GETTING WEIRD ERROR, CHECK FOR NULL. java should populate board with nulls, though.
-        System.out.print(position.toString());
+        // System.out.print(position.toString());
         return board[position.getRow() - 1][position.getColumn() - 1];
     }
 
