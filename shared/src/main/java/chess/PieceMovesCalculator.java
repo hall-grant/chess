@@ -1,6 +1,5 @@
 package chess;
 
-import java.sql.Array;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -20,7 +19,7 @@ public class PieceMovesCalculator {
         else if (piece.getPieceType() == ChessPiece.PieceType.KING) collection.addAll(kingCalculator(board, position, piece));
         else if (piece.getPieceType() == ChessPiece.PieceType.KNIGHT) collection.addAll(knightCalculator(board, position, piece));
         else{
-            System.out.println("Something has gone horribly, horribly wrong.\nInvalid pieceType.");
+            System.out.println("Invalid pieceType.");
         }
 
         return collection;
