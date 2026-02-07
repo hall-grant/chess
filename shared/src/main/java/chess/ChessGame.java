@@ -316,37 +316,3 @@ public class ChessGame {
 
 
 }
-
-/*
-    public Collection<ChessMove> validMoves(ChessPosition startPosition) {
-        Collection<ChessMove> validMoves = new ArrayList<>();
-        ChessPiece checkPiece = board.getPiece(startPosition);
-
-        // case where startPosition has the incorrect color of piece
-        // if(checkPiece.getTeamColor() != turn) return validMoves;
-
-        // case where startPosition doesn't have a piece
-        if(checkPiece == null){
-            return null;
-        }
-
-        for(ChessMove move : checkPiece.pieceMoves(board, startPosition)){
-            ChessGame cloneGame = new ChessGame();
-            ChessBoard clone = board.clone();
-            cloneGame.setBoard(clone);
-            cloneGame.setTeamTurn(turn);
-
-            try{
-                movePiece(cloneGame.getBoard(), move);
-            } catch (InvalidMoveException ex){
-                throw new RuntimeException(ex);
-            }
-
-            if(!cloneGame.isInCheck(turn)) validMoves.add(move);
-
-        }
-
-        return validMoves;
-
-    }
- */
