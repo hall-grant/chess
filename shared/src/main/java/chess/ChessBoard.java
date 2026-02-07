@@ -116,9 +116,9 @@ public class ChessBoard implements Cloneable{
 
             for (int i = 1; i <=8; i ++){
                 for (int j = 1; j <= 8; j++){
-                    ChessPiece piece = this.board[i][j];
+                    ChessPiece piece = this.board[i-1][j-1];
                     if(piece != null){
-                        clone.board[i][j] = piece;
+                        clone.board[i-1][j-1] = piece;
                     }
 
                 }

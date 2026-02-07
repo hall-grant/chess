@@ -62,7 +62,8 @@ public class ChessPiece {
             throw new Error("No pieces on board.");
         }
 
-        return PieceMovesCalculator.chessMoveCollection(board, myPosition);
+        // return PieceMovesCalculator.chessMoveCollection(board, myPosition);
+        return PieceMovesCalculator.calculateMoves(board, myPosition);
     }
 
     @Override
