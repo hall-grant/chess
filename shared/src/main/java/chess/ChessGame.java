@@ -95,9 +95,14 @@ public class ChessGame {
         // no valid moves for piece
         if(validMoves.isEmpty()) throw new InvalidMoveException("Invalid move: no valid moves for target piece.");
 
+        // in case of move being made out of turn
+        if(board.getPiece(move.getStartPosition()).getTeamColor() != turn) throw new InvalidMoveException("Candidate piece is out of turn");
+
         // check if valid move
+        boolean foundMove = false;
         for(ChessMove checkMove : validMoves){
             if(checkMove.equals(move)){
+                foundMove = true;
                 ChessPiece initialPiece = board.getPiece(move.getStartPosition());
                 board.addPiece(move.getStartPosition(), null);
 
@@ -105,6 +110,8 @@ public class ChessGame {
                 else board.addPiece(move.getEndPosition(), new ChessPiece(turn, move.getPromotionPiece()));
             }
         }
+
+        if(!foundMove) throw new InvalidMoveException("Move not found");
 
         if(turn == TeamColor.WHITE) turn = TeamColor.BLACK;
         else if (turn == TeamColor.BLACK) turn = TeamColor.WHITE;
