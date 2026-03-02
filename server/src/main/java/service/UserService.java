@@ -42,4 +42,33 @@ public class UserService {
     }
 
 
+    public LoginResult login(LoginRequest r) throws DataAccessException{
+        if(r == null || r.username () == null || r.password() == null){
+            throw new DataAccessException("bad request");
+        }
+
+        // check if username is correct
+        UserData user = userDao.getUser(r.username());
+        if(user == null){
+            throw new DataAccessException("unauthorized");
+        }
+        if(!user.password().equals(r.password())){
+            throw new DataAccessException("unauthorized");
+        }
+
+        // return an auth
+        String authToken = UUID.randomUUID().toString();
+        // make sure it's unique
+        while(authDao.getAuth(authToken) != null){
+            authToken = UUID.randomUUID().toString();
+        }
+
+        AuthData authData = new AuthData(authToken, r.username());
+        authDao.createAuth(authData);
+
+        return new LoginResult(r.username(), authToken);
+
+    }
+
+
 }

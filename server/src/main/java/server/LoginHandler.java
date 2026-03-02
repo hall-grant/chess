@@ -3,29 +3,27 @@ package server;
 import com.google.gson.Gson;
 import dataaccess.DataAccessException;
 import io.javalin.http.Context;
-import service.RegisterRequest;
-import service.RegisterResult;
+import service.LoginRequest;
+import service.LoginResult;
 import service.UserService;
 
 import java.util.Map;
 
-
-public class RegisterHandler {
-    private final UserService service;
+public class LoginHandler {
     private final Gson gson;
+    private final UserService service;
 
-    public RegisterHandler(UserService service){
-        this.service = service;
+    public LoginHandler(UserService userService){
+        this.service = userService;
         gson = new Gson();
     }
 
     public void handle(Context ctx){
         try{
-            RegisterRequest req = gson.fromJson(ctx.body(), RegisterRequest.class); // context body, class type of RegisterRequest
-            RegisterResult res = service.register(req);
-            ctx.status(200); // OK
+            LoginRequest req = gson.fromJson(ctx.body(), LoginRequest.class);
+            LoginResult res = service.login(req);
+            ctx.status(200);
             ctx.json(res);
-
         }catch (DataAccessException ex){
             if(ex.getMessage().equals("bad request")){
                 ctx.status(400);
@@ -33,7 +31,10 @@ public class RegisterHandler {
             } else if (ex.getMessage().equals("already taken")){
                 ctx.status(403);
                 ctx.json(Map.of("message", "Error: already taken"));
-            } else{
+            }else if (ex.getMessage().equals("unauthorized")){
+                ctx.status(401);
+                ctx.json(Map.of("message", "Error: unauthorized"));
+            }else{
                 ctx.status(500);
                 ctx.json(Map.of("message", "Error: " + ex.getMessage()));
             }

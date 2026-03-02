@@ -29,11 +29,14 @@ public class Server {
         UserService userService = new UserService(userDao, authDao);
         RegisterHandler registerHandler = new RegisterHandler(userService);
 
+        LoginHandler loginHandler = new LoginHandler(userService);
+
 
 
         // Endpoints
         javalin.delete("/db", ctx -> clearHandler.handle(ctx));
         javalin.post("/user", ctx -> registerHandler.handle(ctx));
+        javalin.post("/session", ctx -> loginHandler.handle(ctx));
 
     }
 
