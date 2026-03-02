@@ -8,13 +8,13 @@ import java.util.Map;
 import java.util.HashMap;
 
 public class GameDao {
-    private Map<Integer, GameData> games = new HashMap<>();
+    private final Map<Integer, GameData> games = new HashMap<>();
 
     public void createGame(GameData gameData) throws DataAccessException{
         if(!games.containsKey(gameData.gameID())){
-            games.put(gameData.gameID(), gameData);
+            throw new DataAccessException("Game already exists");
         }
-        throw new DataAccessException("Game already exists");
+        games.put(gameData.gameID(), gameData);
     }
 
     public GameData getGame(int gameID) throws DataAccessException{

@@ -21,7 +21,7 @@ public class ClearHandler {
             ctx.json(Map.of()); // empty object
         }catch(DataAccessException ex){
             ctx.status(500);
-            ctx.json(Map.of("error", ex.getMessage()));
+            ctx.json(Map.of("message", "Error: " + ex.getMessage()));
         }
     }
 }

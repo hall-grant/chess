@@ -16,11 +16,11 @@ public class UserDao {
         users.put(user.username(), user);
     }
 
-    public UserData getUser(String username) throws DataAccessException{
+    public UserData getUser(String username){
         if(users.containsKey(username)){
             return users.get(username);
         }
-        throw new DataAccessException("Username doesn't exist");
+        return null;
     }
 
 
