@@ -31,12 +31,15 @@ public class Server {
 
         LoginHandler loginHandler = new LoginHandler(userService);
 
+        LogoutHandler logoutHandler = new LogoutHandler(userService);
+
 
 
         // Endpoints
         javalin.delete("/db", ctx -> clearHandler.handle(ctx));
         javalin.post("/user", ctx -> registerHandler.handle(ctx));
         javalin.post("/session", ctx -> loginHandler.handle(ctx));
+        javalin.delete("/session", ctx -> logoutHandler.handle(ctx));
 
     }
 

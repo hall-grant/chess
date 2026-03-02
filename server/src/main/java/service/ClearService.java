@@ -13,9 +13,11 @@ public class ClearService {
         this.gameDao = gameDao;
     }
 
-    public void clear() throws DataAccessException{
+    public ClearResult clear() throws DataAccessException{
         userDao.clear();
         authTokenDao.clear();
         gameDao.clear();
+
+        return new ClearResult();
     }
 }
