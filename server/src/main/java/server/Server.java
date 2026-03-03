@@ -33,13 +33,17 @@ public class Server {
 
         LogoutHandler logoutHandler = new LogoutHandler(userService);
 
+        GameService gameService = new GameService(gameDao, authDao);
+        CreateHandler gameHandler = new CreateHandler(gameService);
+
 
 
         // Endpoints
-        javalin.delete("/db", ctx -> clearHandler.handle(ctx));
-        javalin.post("/user", ctx -> registerHandler.handle(ctx));
-        javalin.post("/session", ctx -> loginHandler.handle(ctx));
-        javalin.delete("/session", ctx -> logoutHandler.handle(ctx));
+        javalin.delete("/db", ctx -> clearHandler.handle(ctx));         // clear
+        javalin.post("/user", ctx -> registerHandler.handle(ctx));      // register
+        javalin.post("/session", ctx -> loginHandler.handle(ctx));      // login
+        javalin.delete("/session", ctx -> logoutHandler.handle(ctx));   // logout
+        javalin.post("/game", ctx -> gameHandler.handle(ctx));          // create
 
     }
 
