@@ -23,18 +23,26 @@ public class Server {
 
 
         // Services and handlers
+        // clear
         ClearService clearService = new ClearService(userDao, authDao, gameDao);
         ClearHandler clearHandler = new ClearHandler(clearService);
 
+        // register
         UserService userService = new UserService(userDao, authDao);
         RegisterHandler registerHandler = new RegisterHandler(userService);
 
+        // login
         LoginHandler loginHandler = new LoginHandler(userService);
 
+        // logout
         LogoutHandler logoutHandler = new LogoutHandler(userService);
 
+        // create
         GameService gameService = new GameService(gameDao, authDao);
         CreateHandler gameHandler = new CreateHandler(gameService);
+
+        // list
+        ListHandler listHandler = new ListHandler(gameService);
 
 
 
@@ -44,6 +52,7 @@ public class Server {
         javalin.post("/session", ctx -> loginHandler.handle(ctx));      // login
         javalin.delete("/session", ctx -> logoutHandler.handle(ctx));   // logout
         javalin.post("/game", ctx -> gameHandler.handle(ctx));          // create
+        javalin.get("/game", ctx -> listHandler.handle(ctx));           // list
 
     }
 
