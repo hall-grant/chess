@@ -19,7 +19,7 @@ public class GameService {
     public GameService(GameDao gameDao, AuthTokenDao authDao){
         this.gameDao = gameDao;
         this.authDao = authDao;
-        gameID = 0;
+        gameID = 1; // can't start at 0? why would you be like this, tests?
     }
 
     public CreateResult create(CreateRequest r) throws DataAccessException{
