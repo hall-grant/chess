@@ -8,20 +8,17 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class GameServiceTest {
     private GameDao gameDao;
-    private AuthTokenDao authDao;
-    private UserDao userDao;
     private GameService gameService;
-    private UserService userService;
 
     private String authToken;
 
     @BeforeEach
     void setup() throws DataAccessException {
         gameDao = new GameDao();
-        authDao = new AuthTokenDao();
-        userDao = new UserDao();
+        AuthTokenDao authDao = new AuthTokenDao();
+        UserDao userDao = new UserDao();
         gameService = new GameService(gameDao, authDao);
-        userService = new UserService(userDao, authDao);
+        UserService userService = new UserService(userDao, authDao);
 
         RegisterRequest registerRequest = new RegisterRequest("bob", "pass", "email@email");
         RegisterResult registerResult = userService.register(registerRequest);
@@ -137,7 +134,7 @@ public class GameServiceTest {
 
     // 500 error
     @Test
-    void joinBadID() throws DataAccessException{
+    void joinBadID(){
         JoinRequest req = new JoinRequest(authToken, 10, "BLACK");
         assertThrows(DataAccessException.class, () -> gameService.join(req));
     }

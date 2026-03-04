@@ -1,6 +1,7 @@
 package dataaccess;
 
 import model.GameData;
+import model.UserData;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +37,6 @@ public class GameDao {
         }
         games.put(game.gameID(), game);
     }
-
 
 
     public void clear(){

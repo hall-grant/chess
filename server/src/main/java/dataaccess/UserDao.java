@@ -2,12 +2,14 @@ package dataaccess;
 
 import model.UserData;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class UserDao {
 
-    private Map<String, UserData> users = new HashMap<>();
+    private final Map<String, UserData> users = new HashMap<>();
 
     public void createUser(UserData user) throws DataAccessException{
         if(users.containsKey(user.username())){
@@ -21,6 +23,10 @@ public class UserDao {
             return users.get(username);
         }
         return null;
+    }
+
+    public List<UserData> listUsers(){
+        return new ArrayList<>(users.values());
     }
 
 
