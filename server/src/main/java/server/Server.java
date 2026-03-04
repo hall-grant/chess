@@ -44,6 +44,9 @@ public class Server {
         // list
         ListHandler listHandler = new ListHandler(gameService);
 
+        // join
+        JoinHandler joinHandler = new JoinHandler(gameService);
+
 
 
         // Endpoints
@@ -53,6 +56,7 @@ public class Server {
         javalin.delete("/session", ctx -> logoutHandler.handle(ctx));   // logout
         javalin.post("/game", ctx -> gameHandler.handle(ctx));          // create
         javalin.get("/game", ctx -> listHandler.handle(ctx));           // list
+        javalin.put("/game", ctx -> joinHandler.handle(ctx));           // join
 
     }
 
