@@ -138,32 +138,90 @@ public class PieceMovesCalculator {
         } // probably isn't needed
 
         ChessPosition upOne = offset(startPos, up, 0);
-        if (upOne != null) {
-            if (board.getPiece(upOne) == null) {
+        if (upOne != null && board.getPiece(upOne) == null) {
+            addRegularMove(collection, startPos, upOne);
 
-                // pawn promotion
-                if (upOne.getRow() == 8 || upOne.getRow() == 1) {
-                    collection.add(new ChessMove(startPos, upOne, ChessPiece.PieceType.ROOK));
-                    collection.add(new ChessMove(startPos, upOne, ChessPiece.PieceType.BISHOP));
-                    collection.add(new ChessMove(startPos, upOne, ChessPiece.PieceType.KNIGHT));
-                    collection.add(new ChessMove(startPos, upOne, ChessPiece.PieceType.QUEEN));
-                } else {
+            // up 2 if on start
+            int startRow;
+            if (piece.getTeamColor() == ChessGame.TeamColor.WHITE) {
+                startRow = 2;
+            } else{
+                startRow = 7;
+            }
 
-                    // non-promotion
-                    collection.add(new ChessMove(startPos, upOne, null));
-
-                    // if on starting square
-                    if ((piece.getTeamColor() == ChessGame.TeamColor.WHITE && startPos.getRow() == 2) ||
-                            (piece.getTeamColor() == ChessGame.TeamColor.BLACK && startPos.getRow() == 7)) {
-                        ChessPosition upTwo = offset(startPos, up + up, 0);
-                        if (upTwo != null && board.getPiece(upTwo) == null) {
-                            collection.add(new ChessMove(startPos, upTwo, null));
-                        }
-                    }
-
+            if(startPos.getRow() == startRow){
+                ChessPosition upTwo = offset(startPos, up * 2, 0);
+                if(upTwo != null && board.getPiece(upTwo) == null){
+                    addRegularMove(collection, startPos, upTwo);
                 }
             }
+
         }
+
+
+        // capturing
+
+        int[] captureDirections = {-1, 1};
+        for(int colDir : captureDirections){
+            ChessPosition killPos = offset(startPos, up, colDir);
+            if(killPos == null){
+                continue;
+            }
+            ChessPiece killPiece = board.getPiece(killPos);
+            if(killPiece != null && killPiece.getTeamColor() != piece.getTeamColor()){
+                addRegularMove(collection, startPos, killPos);
+            }
+        }
+
+
+        return collection;
+    }
+
+
+    private static boolean checkAddMove(Collection<ChessMove> moves,
+                                        ChessBoard board,
+                                        ChessPiece piece,
+                                        ChessPosition startPos,
+                                        ChessPosition checkPos,
+                                        boolean canContinue){
+        if(checkPos == null){
+            return false;
+        }
+        ChessPiece checkPiece = board.getPiece(checkPos);
+        if(checkPiece == null){
+            moves.add(new ChessMove(startPos, checkPos, null));
+            return true;
+        } else if (checkPiece.getTeamColor() != piece.getTeamColor()) {
+            moves.add(new ChessMove(startPos, checkPos, null));
+            return !canContinue;
+        }
+        return false;
+    }
+
+
+    private static void addRegularMove(Collection<ChessMove> collection,
+                                       ChessPosition startPos,
+                                       ChessPosition endPos){
+        if(endPos == null){ // out of bounds
+            return;
+        }
+        int row = endPos.getRow();
+        if(row == 1 || row == 8){
+            collection.add(new ChessMove(startPos, endPos, ChessPiece.PieceType.ROOK));
+            collection.add(new ChessMove(startPos, endPos, ChessPiece.PieceType.BISHOP));
+            collection.add(new ChessMove(startPos, endPos, ChessPiece.PieceType.KNIGHT));
+            collection.add(new ChessMove(startPos, endPos, ChessPiece.PieceType.QUEEN));
+        } else{
+            collection.add(new ChessMove(startPos, endPos, null));
+        }
+    }
+
+}
+
+
+
+/*
+
 
         // capturing left
         if (startPos.getColumn() >= 2) {
@@ -208,27 +266,5 @@ public class PieceMovesCalculator {
         }
 
 
-        return collection;
-    }
-
-
-    private static boolean checkAddMove(Collection<ChessMove> moves, ChessBoard board, ChessPiece piece, ChessPosition startPos, ChessPosition checkPos, boolean canContinue){
-        if(checkPos == null){
-            return false;
-        }
-        ChessPiece checkPiece = board.getPiece(checkPos);
-        if(checkPiece == null){
-            moves.add(new ChessMove(startPos, checkPos, null));
-            return true;
-        } else if (checkPiece.getTeamColor() != piece.getTeamColor()) {
-            moves.add(new ChessMove(startPos, checkPos, null));
-            return !canContinue;
-        }
-        return false;
-    }
-
-
-
-}
-
+ */
 
