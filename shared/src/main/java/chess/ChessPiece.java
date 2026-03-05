@@ -10,8 +10,8 @@ import java.util.Objects;
  * signature of the existing methods.
  */
 public class ChessPiece {
-    private ChessGame.TeamColor pieceColor;
-    private PieceType type;
+    private final ChessGame.TeamColor pieceColor;
+    private final PieceType type;
 
     public ChessPiece(ChessGame.TeamColor pieceColor, ChessPiece.PieceType type) {
         this.pieceColor = pieceColor;
@@ -53,12 +53,14 @@ public class ChessPiece {
      */
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
         int pieces = 0;
-        for(int i = 1; i <= 8; i ++){
-            for (int j = 1; j <= 8; j++){
-                if(board.getPiece(new ChessPosition(i,j)) != null) pieces ++;
+        for (int i = 1; i <= 8; i++) {
+            for (int j = 1; j <= 8; j++) {
+                if (board.getPiece(new ChessPosition(i, j)) != null) {
+                    pieces++;
+                }
             }
         }
-        if(pieces <= 0){
+        if (pieces <= 0) {
             throw new Error("No pieces on board.");
         }
 
