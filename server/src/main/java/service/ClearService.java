@@ -1,6 +1,7 @@
 package service;
 
 import dataaccess.*;
+import service.records.ClearResult;
 
 public class ClearService {
     private final UserDao userDao;

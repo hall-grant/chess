@@ -3,8 +3,8 @@ package server;
 import com.google.gson.Gson;
 import dataaccess.DataAccessException;
 import io.javalin.http.Context;
-import service.LoginRequest;
-import service.LoginResult;
+import service.records.LoginRequest;
+import service.records.LoginResult;
 import service.UserService;
 
 import java.util.Map;

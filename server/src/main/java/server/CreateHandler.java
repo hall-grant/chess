@@ -3,8 +3,8 @@ package server;
 import com.google.gson.Gson;
 import dataaccess.DataAccessException;
 import io.javalin.http.Context;
-import service.CreateRequest;
-import service.CreateResult;
+import service.records.CreateRequest;
+import service.records.CreateResult;
 import service.GameService;
 
 import java.util.Map;
@@ -23,13 +23,7 @@ public class CreateHandler {
             Map body = gson.fromJson(ctx.body(), Map.class);
 
             String gameName = null;
-            /*
-            if(body == null){
-                gameName = null; // needed
-            } else{
-                gameName = body.get("gameName").toString();
-            }
-            */
+
             if (body != null && body.get("gameName") != null) {
                 gameName = body.get("gameName").toString();
             }

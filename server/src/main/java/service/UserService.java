@@ -5,6 +5,7 @@ import dataaccess.DataAccessException;
 import dataaccess.UserDao;
 import model.AuthData;
 import model.UserData;
+import service.records.*;
 
 import java.util.UUID;
 

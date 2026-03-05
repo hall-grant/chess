@@ -6,6 +6,7 @@ import dataaccess.DataAccessException;
 import dataaccess.GameDao;
 import model.AuthData;
 import model.GameData;
+import service.records.*;
 
 import java.util.ArrayList;
 import java.util.List;
