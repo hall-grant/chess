@@ -1,4 +1,4 @@
-package passoff.chess.ChessGame;
+package passoff.chess.chessgame;
 
 import chess.*;
 import org.junit.jupiter.api.Assertions;
