@@ -207,22 +207,8 @@ public class ChessGame {
         // clone board, check if any moves get out of check
         // this seems extremely inefficient, but whatever
 
-        // get positions of all pieces on teamColor
-        // also get king's position.
-        ChessPosition kingPos = null;
-        Collection<ChessPosition> teamPositions = new ArrayList<>(); // also contains king
-        for (int i = 1; i <= 8; i++) {
-            for (int j = 1; j <= 8; j++) {
-                ChessPiece potentialPiece = board.getPiece(new ChessPosition(i, j));
-                if (potentialPiece != null && potentialPiece.getTeamColor() == teamColor) {
-                    // get king position, if applicable
-                    if (kingPos == null && potentialPiece.getPieceType() == ChessPiece.PieceType.KING) {
-                        kingPos = new ChessPosition(i, j);
-                    }
-                    teamPositions.add(new ChessPosition(i, j));
-                }
-            }
-        }
+        Collection<ChessPosition> teamPositions = new ArrayList<>();
+        ChessPosition kingPos = getTeamPositions(teamColor, teamPositions);
 
         // move through each valid move to check whether anything gets king out of check.
         for (ChessPosition potentialPos : teamPositions) {
@@ -255,22 +241,9 @@ public class ChessGame {
             return false;
         }
 
-        // get positions of all pieces on teamColor
-        // also get king's position.
-        ChessPosition kingPos = null;
-        Collection<ChessPosition> teamPositions = new ArrayList<>(); // also contains king
-        for (int i = 1; i <= 8; i++) {
-            for (int j = 1; j <= 8; j++) {
-                ChessPiece potentialPiece = board.getPiece(new ChessPosition(i, j));
-                if (potentialPiece != null && potentialPiece.getTeamColor() == teamColor) {
-                    // get king position, if applicable
-                    if (kingPos == null && potentialPiece.getPieceType() == ChessPiece.PieceType.KING) {
-                        kingPos = new ChessPosition(i, j);
-                    }
-                    teamPositions.add(new ChessPosition(i, j));
-                }
-            }
-        }
+
+        Collection<ChessPosition> teamPositions = new ArrayList<>();
+        ChessPosition kingPos = getTeamPositions(teamColor, teamPositions);
 
 
         for (ChessPosition checkPos : teamPositions) {
@@ -344,6 +317,27 @@ public class ChessGame {
             board.addPiece(endPos, new ChessPiece(piece.getTeamColor(), piece.getPieceType()));
         }
 
+    }
+
+    // get positions of all pieces on teamColor
+    // also get king's position.
+    private ChessPosition getTeamPositions(TeamColor teamColor, Collection<ChessPosition> teamPositions) {
+        ChessPosition kingPos = null;
+
+        for (int i = 1; i <= 8; i++) {
+            for (int j = 1; j <= 8; j++) {
+                ChessPosition pos = new ChessPosition(i, j);
+                ChessPiece potentialPiece = board.getPiece(pos);
+                if (potentialPiece != null && potentialPiece.getTeamColor() == teamColor) {
+                    if (kingPos == null && potentialPiece.getPieceType() == ChessPiece.PieceType.KING) {
+                        kingPos = pos;
+                    }
+                    teamPositions.add(pos);
+                }
+            }
+        }
+
+        return kingPos;
     }
 
 

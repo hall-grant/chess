@@ -55,14 +55,7 @@ public class PieceMovesCalculator {
         //                              up,     down,    right,  left
         int [][] possibleDirections = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
 
-        for(int[] direction : possibleDirections){
-            for(int i = 1; i <= 8; i++){
-                ChessPosition newPos = offset(startPos, direction[0] * i, direction[1] * i);
-                if(!checkAddMove(collection, board, piece, startPos, newPos, true)){
-                    break;
-                }
-            }
-        }
+        addRookBishopMoves(collection, board, piece, startPos, possibleDirections);
 
         return collection;
     }
@@ -73,14 +66,7 @@ public class PieceMovesCalculator {
 
         int [][] possibleDirections = {{1, 1}, {1, -1}, {-1, 1}, {-1, -1}};
 
-        for(int[] direction : possibleDirections){
-            for(int i = 1; i <= 8; i++){
-                ChessPosition newPos = offset(startPos, direction[0] * i, direction[1] * i);
-                if(!checkAddMove(collection, board, piece, startPos, newPos, true)){
-                    break;
-                }
-            }
-        }
+        addRookBishopMoves(collection, board, piece, startPos, possibleDirections);
 
         return collection;
     }
@@ -213,6 +199,22 @@ public class PieceMovesCalculator {
             collection.add(new ChessMove(startPos, endPos, ChessPiece.PieceType.QUEEN));
         } else{
             collection.add(new ChessMove(startPos, endPos, null));
+        }
+    }
+
+
+    private static void addRookBishopMoves(Collection<ChessMove> collection,
+                                        ChessBoard board,
+                                        ChessPiece piece,
+                                        ChessPosition startPos,
+                                        int[][] possibleDirections) {
+        for (int[] direction : possibleDirections) {
+            for (int i = 1; i <= 8; i++) {
+                ChessPosition newPos = offset(startPos, direction[0] * i, direction[1] * i);
+                if (!checkAddMove(collection, board, piece, startPos, newPos, true)) {
+                    break;
+                }
+            }
         }
     }
 

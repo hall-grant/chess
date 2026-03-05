@@ -29,7 +29,7 @@ public class LogoutHandler {
         }catch(DataAccessException ex){
             if(ex.getMessage().equals("unauthorized")){
                 ctx.status(401);
-                ctx.result(gson.toJson(Map.of("message", "Error: unauthorized")));
+                ctx.result(gson.toJson(Map.of("message", "Error: " + ex.getMessage())));
             } else{
                 ctx.status(500);
                 ctx.result(gson.toJson(Map.of("message", "Error: " + ex.getMessage())));
