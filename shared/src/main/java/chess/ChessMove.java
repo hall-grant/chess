@@ -8,21 +8,30 @@ import java.util.Objects;
  * Note: You can add to this class, but you may not alter
  * signature of the existing methods.
  */
-public record ChessMove(ChessPosition startPosition, ChessPosition endPosition, ChessPiece.PieceType promotionPiece) {
+public class ChessMove {
+
+    private final ChessPosition startPosition;
+    private final ChessPosition endPosition;
+    private final ChessPiece.PieceType promotionPiece;
+
+    public ChessMove(ChessPosition startPosition, ChessPosition endPosition,
+                     ChessPiece.PieceType promotionPiece) {
+        this.startPosition = startPosition;
+        this.endPosition = endPosition;
+        this.promotionPiece = promotionPiece;
+    }
 
     /**
      * @return ChessPosition of starting location
      */
-    @Override
-    public ChessPosition startPosition() {
+    public ChessPosition getStartPosition() {
         return startPosition;
     }
 
     /**
      * @return ChessPosition of ending location
      */
-    @Override
-    public ChessPosition endPosition() {
+    public ChessPosition getEndPosition() {
         return endPosition;
     }
 
@@ -32,8 +41,7 @@ public record ChessMove(ChessPosition startPosition, ChessPosition endPosition, 
      *
      * @return Type of piece to promote a pawn to, or null if no promotion
      */
-    @Override
-    public ChessPiece.PieceType promotionPiece() {
+    public ChessPiece.PieceType getPromotionPiece() {
         return promotionPiece;
     }
 
@@ -43,12 +51,12 @@ public record ChessMove(ChessPosition startPosition, ChessPosition endPosition, 
             return false;
         }
         ChessMove chessMove = (ChessMove) o;
-        return Objects.equals(startPosition(), chessMove.startPosition()) && Objects.equals(endPosition(), chessMove.endPosition()) && promotionPiece() == chessMove.promotionPiece();
+        return Objects.equals(getStartPosition(), chessMove.getStartPosition()) && Objects.equals(getEndPosition(), chessMove.getEndPosition()) && getPromotionPiece() == chessMove.getPromotionPiece();
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(startPosition(), endPosition(), promotionPiece());
+        return Objects.hash(getStartPosition(), getEndPosition(), getPromotionPiece());
     }
 
     @Override

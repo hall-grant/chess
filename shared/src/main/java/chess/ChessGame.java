@@ -90,24 +90,24 @@ public class ChessGame {
         if(isInStalemate(turn)) throw new InvalidMoveException("Stalemate");
 
 
-        Collection<ChessMove> validMoves = validMoves(move.startPosition());
+        Collection<ChessMove> validMoves = validMoves(move.getStartPosition());
 
         // no valid moves for piece
         if(validMoves.isEmpty()) throw new InvalidMoveException("Invalid move: no valid moves for target piece.");
 
         // in case of move being made out of turn
-        if(board.getPiece(move.startPosition()).getTeamColor() != turn) throw new InvalidMoveException("Candidate piece is out of turn");
+        if(board.getPiece(move.getStartPosition()).getTeamColor() != turn) throw new InvalidMoveException("Candidate piece is out of turn");
 
         // check if valid move
         boolean foundMove = false;
         for(ChessMove checkMove : validMoves){
             if(checkMove.equals(move)){
                 foundMove = true;
-                ChessPiece initialPiece = board.getPiece(move.startPosition());
-                board.addPiece(move.startPosition(), null);
+                ChessPiece initialPiece = board.getPiece(move.getStartPosition());
+                board.addPiece(move.getStartPosition(), null);
 
-                if(move.promotionPiece() == null) board.addPiece(move.endPosition(), new ChessPiece(turn, initialPiece.getPieceType()));
-                else board.addPiece(move.endPosition(), new ChessPiece(turn, move.promotionPiece()));
+                if(move.getPromotionPiece() == null) board.addPiece(move.getEndPosition(), new ChessPiece(turn, initialPiece.getPieceType()));
+                else board.addPiece(move.getEndPosition(), new ChessPiece(turn, move.getPromotionPiece()));
             }
         }
 
@@ -159,7 +159,7 @@ public class ChessGame {
             Collection<ChessPosition> enemyMoves = new ArrayList<>();
 
             for(ChessMove move : enemyPiece.pieceMoves(board, ep)){
-                enemyMoves.add(move.endPosition());
+                enemyMoves.add(move.getEndPosition());
             }
 
             for(ChessPosition enemyMovePos : enemyMoves){
@@ -296,8 +296,8 @@ public class ChessGame {
     }
 
     private void movePiece(ChessBoard board, ChessMove move) throws InvalidMoveException{
-        ChessPosition startPos = move.startPosition();
-        ChessPosition endPos = move.endPosition();
+        ChessPosition startPos = move.getStartPosition();
+        ChessPosition endPos = move.getEndPosition();
         ChessPiece piece = board.getPiece(startPos);
 
         if(piece == null) throw new InvalidMoveException("Given position has no piece");
@@ -306,8 +306,8 @@ public class ChessGame {
         board.addPiece(startPos, null);
 
         // add piece to end (includes promotion)
-        if(move.promotionPiece() != null){
-            board.addPiece(endPos, new ChessPiece(piece.getTeamColor(), move.promotionPiece()));
+        if(move.getPromotionPiece() != null){
+            board.addPiece(endPos, new ChessPiece(piece.getTeamColor(), move.getPromotionPiece()));
         } else{
             board.addPiece(endPos, new ChessPiece(piece.getTeamColor(), piece.getPieceType()));
         }
