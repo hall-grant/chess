@@ -58,4 +58,3 @@ public class CreateHandler {
 }
 
 
-// ctx.result(gson.toJson())
