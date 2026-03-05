@@ -1,5 +1,6 @@
 package server;
 
+import com.google.gson.Gson;
 import dataaccess.DataAccessException;
 import io.javalin.http.Context;
 import service.GameService;
@@ -10,9 +11,11 @@ import java.util.Map;
 
 public class ListHandler {
     private final GameService gameService;
+    private final Gson gson;
 
     public ListHandler(GameService gameService){
         this.gameService = gameService;
+        gson = new Gson();
     }
 
     public void handle(Context ctx){
@@ -21,14 +24,14 @@ public class ListHandler {
             ListResult res = gameService.list(req);
 
             ctx.status(200);
-            ctx.json(res);
+            ctx.result(gson.toJson(res));
         } catch(DataAccessException ex){
             if(ex.getMessage().equals("unauthorized")){
                 ctx.status(401);
-                ctx.json(Map.of("message", "Error: unauthorized"));
+                ctx.result(gson.toJson(Map.of("message", "Error: unauthorized")));
             }else{
                 ctx.status(500);
-                ctx.json(Map.of("message", "Error: " + ex.getMessage()));
+                ctx.result(gson.toJson(Map.of("message", "Error: " + ex.getMessage())));
             }
         }
     }

@@ -47,21 +47,21 @@ public class JoinHandler {
             JoinResult res = gameService.join(req);
 
             ctx.status(200);
-            ctx.json(res);
+            ctx.result(gson.toJson(res));
 
         }catch(DataAccessException ex){
             if(ex.getMessage().equals("unauthorized")){
                 ctx.status(401);
-                ctx.json(Map.of("message", "Error: unauthorized"));
+                ctx.result(gson.toJson(Map.of("message", "Error: unauthorized")));
             } else if(ex.getMessage().equals("bad request")){
                 ctx.status(400);
-                ctx.json(Map.of("message", "Error: bad request"));
+                ctx.result(gson.toJson(Map.of("message", "Error: bad request")));
             } else if(ex.getMessage().equals("already taken")){
                 ctx.status(403);
-                ctx.json(Map.of("message", "Error: already taken"));
+                ctx.result(gson.toJson(Map.of("message", "Error: already taken")));
             } else{
                 ctx.status(500);
-                ctx.json(Map.of("message", "Error: " + ex.getMessage()));
+                ctx.result(gson.toJson(Map.of("message", "Error: " + ex.getMessage())));
             }
         }
     }

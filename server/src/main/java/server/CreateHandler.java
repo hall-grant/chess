@@ -39,20 +39,23 @@ public class CreateHandler {
             CreateResult res = gameService.create(req);
 
             ctx.status(200);
-            ctx.json(res);
+            ctx.result(gson.toJson(res));
         } catch(DataAccessException ex){
             if(ex.getMessage().equals("unauthorized")){
                 ctx.status(401);
-                ctx.json(Map.of("message", "Error: unauthorized"));
+                ctx.result(gson.toJson(Map.of("message", "Error: unauthorized")));
             } else if (ex.getMessage().equals("bad request")){
                 ctx.status(400);
-                ctx.json(Map.of("message", "Error: bad request"));
+                ctx.result(gson.toJson(Map.of("message", "Error: bad request")));
             } else{
                 ctx.status(500);
-                ctx.json(Map.of("message", "Error: " + ex.getMessage()));
+                ctx.result(gson.toJson(Map.of("message", "Error: " + ex.getMessage())));
             }
         }
 
     }
 
 }
+
+
+// ctx.result(gson.toJson())
