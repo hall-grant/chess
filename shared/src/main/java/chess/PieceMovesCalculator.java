@@ -52,88 +52,15 @@ public class PieceMovesCalculator {
 
     private static Collection<ChessMove> calculateRookMoves(ChessBoard board, ChessPosition startPos, ChessPiece piece) {
         Collection<ChessMove> collection = new ArrayList<>();
+        //                              up,     down,    right,  left
+        int [][] possibleDirections = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
 
-        // up
-        for (int i = 1; i <= 8; i++) {
-            ChessPosition checkPos = offset(startPos, 0, i);
-            if (checkPos == null) {
-                break; // out of bounds
-            }
-            // no piece on square
-            if (board.getPiece(checkPos) == null) {
-                collection.add(new ChessMove(startPos, checkPos, null));
-            }
-            // piece occupying target square is same color. abort.
-            else if (board.getPiece(checkPos).getTeamColor() == piece.getTeamColor()) {
-                break;
-            }
-            // piece occupying target square is different color.
-            else if (board.getPiece(checkPos).getTeamColor() != piece.getTeamColor()) {
-                collection.add(new ChessMove(startPos, checkPos, null));
-                break;
-            }
-        }
-
-        // down
-        for (int i = 1; i <= 8; i++) {
-            ChessPosition checkPos = offset(startPos, 0, -i);
-            if (checkPos == null) {
-                break; // out of bounds
-            }
-            // no piece on square
-            if (board.getPiece(checkPos) == null) {
-                collection.add(new ChessMove(startPos, checkPos, null));
-            }
-            // piece occupying target square is same color. abort.
-            else if (board.getPiece(checkPos).getTeamColor() == piece.getTeamColor()) {
-                break;
-            }
-            // piece occupying target square is different color.
-            else if (board.getPiece(checkPos).getTeamColor() != piece.getTeamColor()) {
-                collection.add(new ChessMove(startPos, checkPos, null));
-                break;
-            }
-        }
-
-        // right
-        for (int i = 1; i <= 8; i++) {
-            ChessPosition checkPos = offset(startPos, i, 0);
-            if (checkPos == null) {
-                break; // out of bounds
-            }
-            // no piece on square
-            if (board.getPiece(checkPos) == null) {
-                collection.add(new ChessMove(startPos, checkPos, null));
-            }
-            // piece occupying target square is same color. abort.
-            else if (board.getPiece(checkPos).getTeamColor() == piece.getTeamColor()) {
-                break;
-            }
-            // piece occupying target square is different color.
-            else if (board.getPiece(checkPos).getTeamColor() != piece.getTeamColor()) {
-                collection.add(new ChessMove(startPos, checkPos, null));
-                break;
-            }
-        }
-
-        // left
-        for (int i = 1; i <= 8; i++) {
-            ChessPosition checkPos = offset(startPos, -i, 0);
-            if (checkPos == null) {
-                break; // out of bounds
-            }
-            // no piece on square
-            if (board.getPiece(checkPos) == null) {
-                collection.add(new ChessMove(startPos, checkPos, null));
-            }
-            // piece occupying target square is same color. abort.
-            else if (board.getPiece(checkPos).getTeamColor() == piece.getTeamColor()) {
-                break;
-            }
-            // piece occupying target square is different color.
-            else if (board.getPiece(checkPos).getTeamColor() != piece.getTeamColor()) {
-                collection.add(new ChessMove(startPos, checkPos, null));
-                break;
+        for(int[] direction : possibleDirections){
+            for(int i = 1; i <= 8; i++){
+                ChessPosition newPos = offset(startPos, direction[0] * i, direction[1] * i);
+                if(!checkAddMove(collection, board, piece, startPos, newPos, true)){
+                    break;
+                }
             }
         }
 
@@ -144,87 +71,14 @@ public class PieceMovesCalculator {
     private static Collection<ChessMove> calculateBishopMoves(ChessBoard board, ChessPosition startPos, ChessPiece piece) {
         Collection<ChessMove> collection = new ArrayList<>();
 
-        // up-right
-        for (int i = 1; i <= 8; i++) {
-            ChessPosition checkPos = offset(startPos, i, i);
-            if (checkPos == null) {
-                break; // out of bounds
-            }
-            // no piece on square
-            if (board.getPiece(checkPos) == null) {
-                collection.add(new ChessMove(startPos, checkPos, null));
-            }
-            // piece occupying target square is same color. abort.
-            else if (board.getPiece(checkPos).getTeamColor() == piece.getTeamColor()) {
-                break;
-            }
-            // piece occupying target square is different color.
-            else if (board.getPiece(checkPos).getTeamColor() != piece.getTeamColor()) {
-                collection.add(new ChessMove(startPos, checkPos, null));
-                break;
-            }
-        }
+        int [][] possibleDirections = {{1, 1}, {1, -1}, {-1, 1}, {-1, -1}};
 
-        // up-left
-        for (int i = 1; i <= 8; i++) {
-            ChessPosition checkPos = offset(startPos, i, -i);
-            if (checkPos == null) {
-                break; // out of bounds
-            }
-            // no piece on square
-            if (board.getPiece(checkPos) == null) {
-                collection.add(new ChessMove(startPos, checkPos, null));
-            }
-            // piece occupying target square is same color. abort.
-            else if (board.getPiece(checkPos).getTeamColor() == piece.getTeamColor()) {
-                break;
-            }
-            // piece occupying target square is different color.
-            else if (board.getPiece(checkPos).getTeamColor() != piece.getTeamColor()) {
-                collection.add(new ChessMove(startPos, checkPos, null));
-                break;
-            }
-        }
-
-        // down-right
-        for (int i = 1; i <= 8; i++) {
-            ChessPosition checkPos = offset(startPos, -i, i);
-            if (checkPos == null) {
-                break; // out of bounds
-            }
-            // no piece on square
-            if (board.getPiece(checkPos) == null) {
-                collection.add(new ChessMove(startPos, checkPos, null));
-            }
-            // piece occupying target square is same color. abort.
-            else if (board.getPiece(checkPos).getTeamColor() == piece.getTeamColor()) {
-                break;
-            }
-            // piece occupying target square is different color.
-            else if (board.getPiece(checkPos).getTeamColor() != piece.getTeamColor()) {
-                collection.add(new ChessMove(startPos, checkPos, null));
-                break;
-            }
-        }
-
-        // down-left
-        for (int i = 1; i <= 8; i++) {
-            ChessPosition checkPos = offset(startPos, -i, -i);
-            if (checkPos == null) {
-                break; // out of bounds
-            }
-            // no piece on square
-            if (board.getPiece(checkPos) == null) {
-                collection.add(new ChessMove(startPos, checkPos, null));
-            }
-            // piece occupying target square is same color. abort.
-            else if (board.getPiece(checkPos).getTeamColor() == piece.getTeamColor()) {
-                break;
-            }
-            // piece occupying target square is different color.
-            else if (board.getPiece(checkPos).getTeamColor() != piece.getTeamColor()) {
-                collection.add(new ChessMove(startPos, checkPos, null));
-                break;
+        for(int[] direction : possibleDirections){
+            for(int i = 1; i <= 8; i++){
+                ChessPosition newPos = offset(startPos, direction[0] * i, direction[1] * i);
+                if(!checkAddMove(collection, board, piece, startPos, newPos, true)){
+                    break;
+                }
             }
         }
 
@@ -245,110 +99,12 @@ public class PieceMovesCalculator {
     private static Collection<ChessMove> calculateKingMoves(ChessBoard board, ChessPosition startPos, ChessPiece piece) {
         Collection<ChessMove> collection = new ArrayList<>();
 
-        ChessPosition checkPos;
+        int[][] possibleDirections = {{1,0}, {-1,0}, {0,1}, {0,-1}, {1,1}, {1,-1}, {-1,1}, {-1,-1}};
 
-        // up
-        checkPos = offset(startPos, 1, 0);
-        if (checkPos != null) { // if not out of bounds
-            // no piece on square
-            if (board.getPiece(checkPos) == null) {
-                collection.add(new ChessMove(startPos, checkPos, null));
-            }
-            // piece occupying target square is different color.
-            else if (board.getPiece(checkPos).getTeamColor() != piece.getTeamColor()) {
-                collection.add(new ChessMove(startPos, checkPos, null));
-            }
-        }
-
-        // down
-        checkPos = offset(startPos, -1, 0);
-        if (checkPos != null) { // if not out of bounds
-            // no piece on square
-            if (board.getPiece(checkPos) == null) {
-                collection.add(new ChessMove(startPos, checkPos, null));
-            }
-            // piece occupying target square is different color.
-            else if (board.getPiece(checkPos).getTeamColor() != piece.getTeamColor()) {
-                collection.add(new ChessMove(startPos, checkPos, null));
-            }
-        }
-
-        // right
-        checkPos = offset(startPos, 0, 1);
-        if (checkPos != null) { // if not out of bounds
-            // no piece on square
-            if (board.getPiece(checkPos) == null) {
-                collection.add(new ChessMove(startPos, checkPos, null));
-            }
-            // piece occupying target square is different color.
-            else if (board.getPiece(checkPos).getTeamColor() != piece.getTeamColor()) {
-                collection.add(new ChessMove(startPos, checkPos, null));
-            }
-        }
-
-        // left
-        checkPos = offset(startPos, 0, -1);
-        if (checkPos != null) { // if not out of bounds
-            // no piece on square
-            if (board.getPiece(checkPos) == null) {
-                collection.add(new ChessMove(startPos, checkPos, null));
-            }
-            // piece occupying target square is different color.
-            else if (board.getPiece(checkPos).getTeamColor() != piece.getTeamColor()) {
-                collection.add(new ChessMove(startPos, checkPos, null));
-            }
-        }
-
-        // up-right
-        checkPos = offset(startPos, 1, 1);
-        if (checkPos != null) { // if not out of bounds
-            // no piece on square
-            if (board.getPiece(checkPos) == null) {
-                collection.add(new ChessMove(startPos, checkPos, null));
-            }
-            // piece occupying target square is different color.
-            else if (board.getPiece(checkPos).getTeamColor() != piece.getTeamColor()) {
-                collection.add(new ChessMove(startPos, checkPos, null));
-            }
-        }
-
-        // up-left
-        checkPos = offset(startPos, 1, -1);
-        if (checkPos != null) { // if not out of bounds
-            // no piece on square
-            if (board.getPiece(checkPos) == null) {
-                collection.add(new ChessMove(startPos, checkPos, null));
-            }
-            // piece occupying target square is different color.
-            else if (board.getPiece(checkPos).getTeamColor() != piece.getTeamColor()) {
-                collection.add(new ChessMove(startPos, checkPos, null));
-            }
-        }
-
-        // down-right
-        checkPos = offset(startPos, -1, 1);
-        if (checkPos != null) { // if not out of bounds
-            // no piece on square
-            if (board.getPiece(checkPos) == null) {
-                collection.add(new ChessMove(startPos, checkPos, null));
-            }
-            // piece occupying target square is different color.
-            else if (board.getPiece(checkPos).getTeamColor() != piece.getTeamColor()) {
-                collection.add(new ChessMove(startPos, checkPos, null));
-            }
-        }
-
-        // down-left
-        checkPos = offset(startPos, -1, -1);
-        if (checkPos != null) { // if not out of bounds
-            // no piece on square
-            if (board.getPiece(checkPos) == null) {
-                collection.add(new ChessMove(startPos, checkPos, null));
-            }
-            // piece occupying target square is different color.
-            else if (board.getPiece(checkPos).getTeamColor() != piece.getTeamColor()) {
-                collection.add(new ChessMove(startPos, checkPos, null));
-            }
+        for(int[] direction : possibleDirections){
+            // no need for inner loop
+            ChessPosition newPos = offset(startPos, direction[0], direction[1]);
+            checkAddMove(collection, board, piece, startPos, newPos, false); // king doesn't continue after one check
         }
 
         return collection;
@@ -358,112 +114,11 @@ public class PieceMovesCalculator {
     private static Collection<ChessMove> calculateKnightMoves(ChessBoard board, ChessPosition startPos, ChessPiece piece) {
         Collection<ChessMove> collection = new ArrayList<>();
 
-        ChessPosition checkPos;
-
-        // up 2, right 1
-        checkPos = offset(startPos, 2, 1);
-        if (checkPos != null) { // if not out of bounds
-            // no piece on square
-            if (board.getPiece(checkPos) == null) {
-                collection.add(new ChessMove(startPos, checkPos, null));
-            }
-            // piece occupying target square is different color.
-            else if (board.getPiece(checkPos).getTeamColor() != piece.getTeamColor()) {
-                collection.add(new ChessMove(startPos, checkPos, null));
-            }
+        int[][] possibleDirections = {{2,1}, {1,2}, {-1,2}, {-2,1}, {-2,-1}, {-1,-2}, {1,-2}, {2,-1}};
+        for(int[] direction : possibleDirections){
+            ChessPosition newPos = offset(startPos, direction[0], direction[1]);
+            checkAddMove(collection, board, piece, startPos, newPos, false); // can't continue after move
         }
-
-        // up 1, right 2
-        checkPos = offset(startPos, 1, 2);
-        if (checkPos != null) { // if not out of bounds
-            // no piece on square
-            if (board.getPiece(checkPos) == null) {
-                collection.add(new ChessMove(startPos, checkPos, null));
-            }
-            // piece occupying target square is different color.
-            else if (board.getPiece(checkPos).getTeamColor() != piece.getTeamColor()) {
-                collection.add(new ChessMove(startPos, checkPos, null));
-            }
-        }
-
-        // down 1, right 2
-        checkPos = offset(startPos, -1, 2);
-        if (checkPos != null) { // if not out of bounds
-            // no piece on square
-            if (board.getPiece(checkPos) == null) {
-                collection.add(new ChessMove(startPos, checkPos, null));
-            }
-            // piece occupying target square is different color.
-            else if (board.getPiece(checkPos).getTeamColor() != piece.getTeamColor()) {
-                collection.add(new ChessMove(startPos, checkPos, null));
-            }
-        }
-
-        // down 2, right 1
-        checkPos = offset(startPos, -2, 1);
-        if (checkPos != null) { // if not out of bounds
-            // no piece on square
-            if (board.getPiece(checkPos) == null) {
-                collection.add(new ChessMove(startPos, checkPos, null));
-            }
-            // piece occupying target square is different color.
-            else if (board.getPiece(checkPos).getTeamColor() != piece.getTeamColor()) {
-                collection.add(new ChessMove(startPos, checkPos, null));
-            }
-        }
-
-        // down 2, left 1
-        checkPos = offset(startPos, -2, -1);
-        if (checkPos != null) { // if not out of bounds
-            // no piece on square
-            if (board.getPiece(checkPos) == null) {
-                collection.add(new ChessMove(startPos, checkPos, null));
-            }
-            // piece occupying target square is different color.
-            else if (board.getPiece(checkPos).getTeamColor() != piece.getTeamColor()) {
-                collection.add(new ChessMove(startPos, checkPos, null));
-            }
-        }
-
-        // down 1, left 2
-        checkPos = offset(startPos, -1, -2);
-        if (checkPos != null) { // if not out of bounds
-            // no piece on square
-            if (board.getPiece(checkPos) == null) {
-                collection.add(new ChessMove(startPos, checkPos, null));
-            }
-            // piece occupying target square is different color.
-            else if (board.getPiece(checkPos).getTeamColor() != piece.getTeamColor()) {
-                collection.add(new ChessMove(startPos, checkPos, null));
-            }
-        }
-
-        // up 1, left 2
-        checkPos = offset(startPos, 1, -2);
-        if (checkPos != null) { // if not out of bounds
-            // no piece on square
-            if (board.getPiece(checkPos) == null) {
-                collection.add(new ChessMove(startPos, checkPos, null));
-            }
-            // piece occupying target square is different color.
-            else if (board.getPiece(checkPos).getTeamColor() != piece.getTeamColor()) {
-                collection.add(new ChessMove(startPos, checkPos, null));
-            }
-        }
-
-        // up 2, left 1
-        checkPos = offset(startPos, 2, -1);
-        if (checkPos != null) { // if not out of bounds
-            // no piece on square
-            if (board.getPiece(checkPos) == null) {
-                collection.add(new ChessMove(startPos, checkPos, null));
-            }
-            // piece occupying target square is different color.
-            else if (board.getPiece(checkPos).getTeamColor() != piece.getTeamColor()) {
-                collection.add(new ChessMove(startPos, checkPos, null));
-            }
-        }
-
 
         return collection;
     }
@@ -557,4 +212,23 @@ public class PieceMovesCalculator {
     }
 
 
+    private static boolean checkAddMove(Collection<ChessMove> moves, ChessBoard board, ChessPiece piece, ChessPosition startPos, ChessPosition checkPos, boolean canContinue){
+        if(checkPos == null){
+            return false;
+        }
+        ChessPiece checkPiece = board.getPiece(checkPos);
+        if(checkPiece == null){
+            moves.add(new ChessMove(startPos, checkPos, null));
+            return true;
+        } else if (checkPiece.getTeamColor() != piece.getTeamColor()) {
+            moves.add(new ChessMove(startPos, checkPos, null));
+            return !canContinue;
+        }
+        return false;
+    }
+
+
+
 }
+
+
