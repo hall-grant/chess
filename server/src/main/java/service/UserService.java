@@ -2,19 +2,21 @@ package service;
 
 import dataaccess.AuthTokenDao;
 import dataaccess.DataAccessException;
+import dataaccess.DatabaseUserDao;
 import dataaccess.UserDao;
 import model.AuthData;
 import model.UserData;
+import org.mindrot.jbcrypt.BCrypt;
 import service.records.*;
 
 import java.util.UUID;
 
 public class UserService {
 
-    private final UserDao userDao;
+    private final DatabaseUserDao userDao;
     private final AuthTokenDao authDao;
 
-    public UserService(UserDao userDao, AuthTokenDao authDao) {
+    public UserService(DatabaseUserDao userDao, AuthTokenDao authDao) {
         this.userDao = userDao;
         this.authDao = authDao;
     }
@@ -53,7 +55,10 @@ public class UserService {
         if(user == null){
             throw new DataAccessException("unauthorized");
         }
-        if(!user.password().equals(r.password())){
+
+        // compare hashed password
+        // user.password().equals(r.password())
+        if(!BCrypt.checkpw(r.password(), user.password())){
             throw new DataAccessException("unauthorized");
         }
 

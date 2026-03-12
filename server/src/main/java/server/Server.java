@@ -16,7 +16,7 @@ public class Server {
         // Register your endpoints and exception handlers here.
 
         // DAOs
-        UserDao userDao = new UserDao();
+        DatabaseUserDao userDao = new DatabaseUserDao();
         AuthTokenDao authDao = new AuthTokenDao();
         GameDao gameDao = new GameDao();
 

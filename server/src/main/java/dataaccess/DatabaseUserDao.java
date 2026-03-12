@@ -19,7 +19,7 @@ public class DatabaseUserDao {
         // hash password
         String hashPass = BCrypt.hashpw(user.password(), BCrypt.gensalt());
 
-        command = command + "(" + user.username() + ", " + hashPass + ", " + user.email() + ")";
+        command = command + "('" + user.username() + "', '" + hashPass + "', '" + user.email() + "')";
 
         try(Connection connection = DatabaseManager.getConnection();
         Statement statement = connection.createStatement()){
@@ -27,12 +27,12 @@ public class DatabaseUserDao {
             statement.executeUpdate(command);
 
         }catch(SQLException ex){
-            throw new DataAccessException("Creation of new user failed");
+            throw new DataAccessException("Creation of new user failed: " + ex.getMessage());
         }
     }
 
     public UserData getUser(String username) throws DataAccessException{
-        String command = "SELECT username, hashed_password, email FROM Users WHERE username = '" + username + "'";
+        String command = "SELECT username, password, email FROM users WHERE username = '" + username + "'";
 
         try (Connection connection = DatabaseManager.getConnection();
         Statement statement = connection.createStatement();
