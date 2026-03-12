@@ -61,6 +61,17 @@ public class Server {
     }
 
     public int run(int desiredPort) {
+
+        try {
+            DatabaseManager.createDatabase();
+
+            DatabaseManager.createUserTable();
+            DatabaseManager.createAuthTable();
+            DatabaseManager.createGamesTable();
+        } catch(DataAccessException ex){
+            throw new RuntimeException("Database initialization fail", ex);
+        }
+
         javalin.start(desiredPort);
         return javalin.port();
     }
