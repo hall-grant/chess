@@ -95,7 +95,18 @@ public class DatabaseManager {
     }
 
     public static void createAuthTable() throws DataAccessException{
-        ;
+        String command = """
+                CREATE TABLEL IF NOT EXISTS authTokens (
+                authToken VARCHAR(128) PRIMARY KEY,
+                username VARCHAR(128) NOT NULL)
+                """;
+
+        try (Connection connection = getConnection();
+        Statement statement = connection.createStatement()){
+            statement.executeUpdate(command);
+        } catch(SQLException ex){
+            throw new DataAccessException("Creation of auth table failed");
+        }
     }
 
     public static void createGamesTable() throws DataAccessException{

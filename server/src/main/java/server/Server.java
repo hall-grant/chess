@@ -66,7 +66,7 @@ public class Server {
             DatabaseManager.createDatabase();
 
             DatabaseManager.createUserTable();
-            DatabaseManager.createAuthTable();  // stub for now
+            DatabaseManager.createAuthTable();
             DatabaseManager.createGamesTable(); // stub for now
         } catch(DataAccessException ex){
             throw new RuntimeException("Database initialization fail", ex);
