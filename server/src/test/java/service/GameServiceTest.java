@@ -17,7 +17,7 @@ public class GameServiceTest {
     void setup() throws DataAccessException {
         gameDao = new GameDao();
         AuthTokenDao authDao = new AuthTokenDao();
-        UserDao userDao = new UserDao();
+        DatabaseUserDao userDao = new DatabaseUserDao();
         gameService = new GameService(gameDao, authDao);
         UserService userService = new UserService(userDao, authDao);
 

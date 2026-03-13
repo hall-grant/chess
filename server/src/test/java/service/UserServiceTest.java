@@ -14,7 +14,7 @@ public class UserServiceTest {
 
     @BeforeEach
     void setup(){
-        UserDao userDao = new UserDao();
+        DatabaseUserDao userDao = new DatabaseUserDao();
         authDao = new AuthTokenDao();
         userService = new UserService(userDao, authDao);
     }
