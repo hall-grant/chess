@@ -1,8 +1,8 @@
 package service;
 
 import chess.ChessGame;
-import dataaccess.AuthTokenDao;
 import dataaccess.DataAccessException;
+import dataaccess.DatabaseAuthTokenDao;
 import dataaccess.GameDao;
 import model.AuthData;
 import model.GameData;
@@ -14,10 +14,10 @@ import java.util.List;
 public class GameService {
 
     private final GameDao gameDao;
-    private final AuthTokenDao authDao;
+    private final DatabaseAuthTokenDao authDao;
     private int gameID;
 
-    public GameService(GameDao gameDao, AuthTokenDao authDao){
+    public GameService(GameDao gameDao, DatabaseAuthTokenDao authDao){
         this.gameDao = gameDao;
         this.authDao = authDao;
         gameID = 1; // can't start at 0? why would you be like this, tests?

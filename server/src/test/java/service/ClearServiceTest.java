@@ -21,7 +21,7 @@ public class ClearServiceTest {
     void setup(){
         gameDao = new GameDao();
         userDao = new DatabaseUserDao();
-        AuthTokenDao authDao = new AuthTokenDao();
+        DatabaseAuthTokenDao authDao = new DatabaseAuthTokenDao();
 
         userService = new UserService(userDao, authDao);
         gameService = new GameService(gameDao, authDao);

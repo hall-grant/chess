@@ -17,7 +17,7 @@ public class Server {
 
         // DAOs
         DatabaseUserDao userDao = new DatabaseUserDao();
-        AuthTokenDao authDao = new AuthTokenDao();
+        DatabaseAuthTokenDao authDao = new DatabaseAuthTokenDao();
         GameDao gameDao = new GameDao();
 
 

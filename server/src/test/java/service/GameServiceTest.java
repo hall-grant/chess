@@ -16,7 +16,7 @@ public class GameServiceTest {
     @BeforeEach
     void setup() throws DataAccessException {
         gameDao = new GameDao();
-        AuthTokenDao authDao = new AuthTokenDao();
+        DatabaseAuthTokenDao authDao = new DatabaseAuthTokenDao();
         DatabaseUserDao userDao = new DatabaseUserDao();
         gameService = new GameService(gameDao, authDao);
         UserService userService = new UserService(userDao, authDao);

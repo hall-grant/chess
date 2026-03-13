@@ -96,7 +96,7 @@ public class DatabaseManager {
 
     public static void createAuthTable() throws DataAccessException{
         String command = """
-                CREATE TABLEL IF NOT EXISTS authTokens (
+                CREATE TABLE IF NOT EXISTS authTokens (
                 authToken VARCHAR(128) PRIMARY KEY,
                 username VARCHAR(128) NOT NULL)
                 """;

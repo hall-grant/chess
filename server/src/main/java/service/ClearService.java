@@ -5,10 +5,10 @@ import service.records.ClearResult;
 
 public class ClearService {
     private final DatabaseUserDao userDao;
-    private final AuthTokenDao authTokenDao;
+    private final DatabaseAuthTokenDao authTokenDao;
     private final GameDao gameDao;
 
-    public ClearService(DatabaseUserDao userDao, AuthTokenDao authTokenDao, GameDao gameDao){
+    public ClearService(DatabaseUserDao userDao, DatabaseAuthTokenDao authTokenDao, GameDao gameDao){
         this.userDao = userDao;
         this.authTokenDao = authTokenDao;
         this.gameDao = gameDao;
