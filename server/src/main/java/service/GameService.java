@@ -44,8 +44,7 @@ public class GameService {
 
         GameData nGame = new GameData(0, null, null, r.gameName(), new ChessGame());
 
-
-        gameDao.createGame(new GameData(gameID, null, null, r.gameName(), new ChessGame()));
+        int gameID = gameDao.createGame(nGame); // returns gameID from database
 
         return new CreateResult(gameID);
 

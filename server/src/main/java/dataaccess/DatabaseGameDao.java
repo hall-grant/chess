@@ -108,8 +108,8 @@ public class DatabaseGameDao {
                     game = new ChessGame();
                 } else {
                     game = gson.fromJson(gameCode, ChessGame.class);
-                    gameList.add(new GameData(gID, whiteUsername, blackUsername, name, game));
                 }
+                gameList.add(new GameData(gID, whiteUsername, blackUsername, name, game));
             }
 
             return gameList;
