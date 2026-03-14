@@ -110,7 +110,21 @@ public class DatabaseManager {
     }
 
     public static void createGamesTable() throws DataAccessException{
-        ;
+        // don't auto increment gameID for now. maybe change later if bugs
+        String command = """
+                CREATE TABLE IF NOT EXISTS games (
+                gameID INT PRIMARY KEY,
+                whiteUsername VARCHAR(128),
+                blackUsername VARCHAR(128),
+                gameName VARCHAR(128) NOT NULL,
+                game VARCHAR(255) NOT NULL
+                """;
+        try (Connection connection = getConnection();
+        Statement statement = connection.createStatement()){
+            statement.executeUpdate(command);
+        }catch(SQLException ex){
+            throw new DataAccessException("Creation of games table failed");
+        }
     }
 
 }
