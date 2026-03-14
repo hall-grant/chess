@@ -3,6 +3,7 @@ package service;
 import chess.ChessGame;
 import dataaccess.DataAccessException;
 import dataaccess.DatabaseAuthTokenDao;
+import dataaccess.DatabaseGameDao;
 import dataaccess.GameDao;
 import model.AuthData;
 import model.GameData;
@@ -13,11 +14,11 @@ import java.util.List;
 
 public class GameService {
 
-    private final GameDao gameDao;
+    private final DatabaseGameDao gameDao;
     private final DatabaseAuthTokenDao authDao;
     private int gameID;
 
-    public GameService(GameDao gameDao, DatabaseAuthTokenDao authDao){
+    public GameService(DatabaseGameDao gameDao, DatabaseAuthTokenDao authDao){
         this.gameDao = gameDao;
         this.authDao = authDao;
         gameID = 1; // can't start at 0? why would you be like this, tests?
@@ -51,7 +52,7 @@ public class GameService {
 
         List<GameReturn> returns = new ArrayList<>();
         for(GameData game : gameDao.listGames()){
-            returns.add(new GameReturn(game.gameID(), game.whiteUsername(), game.blackUsername(), game.gameName()));
+            returns.add(new GameReturn(game.gameID(), game.gameName(), game.whiteUsername(), game.blackUsername()));
         }
 
         return new ListResult(returns);

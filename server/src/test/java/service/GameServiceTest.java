@@ -8,14 +8,14 @@ import service.records.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class GameServiceTest {
-    private GameDao gameDao;
+    private DatabaseGameDao gameDao;
     private GameService gameService;
 
     private String authToken;
 
     @BeforeEach
     void setup() throws DataAccessException {
-        gameDao = new GameDao();
+        gameDao = new DatabaseGameDao();
         DatabaseAuthTokenDao authDao = new DatabaseAuthTokenDao();
         DatabaseUserDao userDao = new DatabaseUserDao();
         gameService = new GameService(gameDao, authDao);

@@ -10,7 +10,7 @@ import service.records.RegisterResult;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ClearServiceTest {
-    private GameDao gameDao;
+    private DatabaseGameDao gameDao;
     private DatabaseUserDao userDao;
 
     private UserService userService;
@@ -19,7 +19,7 @@ public class ClearServiceTest {
 
     @BeforeEach
     void setup(){
-        gameDao = new GameDao();
+        gameDao = new DatabaseGameDao();
         userDao = new DatabaseUserDao();
         DatabaseAuthTokenDao authDao = new DatabaseAuthTokenDao();
 

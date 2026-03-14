@@ -117,13 +117,13 @@ public class DatabaseManager {
                 whiteUsername VARCHAR(128),
                 blackUsername VARCHAR(128),
                 gameName VARCHAR(128) NOT NULL,
-                game VARCHAR(255) NOT NULL
-                """;
+                game TEXT NOT NULL)
+                """; // game should probably be a TEXT
         try (Connection connection = getConnection();
         Statement statement = connection.createStatement()){
             statement.executeUpdate(command);
         }catch(SQLException ex){
-            throw new DataAccessException("Creation of games table failed");
+            throw new DataAccessException("Creation of games table failed", ex);
         }
     }
 
