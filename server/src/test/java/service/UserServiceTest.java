@@ -16,6 +16,16 @@ public class UserServiceTest {
     void setup(){
         DatabaseUserDao userDao = new DatabaseUserDao();
         authDao = new DatabaseAuthTokenDao();
+
+        DatabaseGameDao gameDao = new DatabaseGameDao();
+
+        ClearService clearService = new ClearService(userDao, authDao, gameDao);
+        try{
+            clearService.clear();
+        }catch(DataAccessException ex){
+            throw new Error("ClearService is horribly wrong");
+        }
+
         userService = new UserService(userDao, authDao);
     }
 

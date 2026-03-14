@@ -16,15 +16,23 @@ public class GameServiceTest {
     @BeforeEach
     void setup() throws DataAccessException {
         gameDao = new DatabaseGameDao();
+
         DatabaseAuthTokenDao authDao = new DatabaseAuthTokenDao();
         DatabaseUserDao userDao = new DatabaseUserDao();
+
         gameService = new GameService(gameDao, authDao);
         UserService userService = new UserService(userDao, authDao);
+
+        ClearService clearService = new ClearService(userDao, authDao, gameDao);
+        clearService.clear();
 
         RegisterRequest registerRequest = new RegisterRequest("bob", "pass", "email@email");
         RegisterResult registerResult = userService.register(registerRequest);
 
         authToken = registerResult.authToken();
+
+
+
     }
 
 
@@ -35,7 +43,7 @@ public class GameServiceTest {
         CreateRequest req = new CreateRequest(authToken, "game");
         CreateResult res = gameService.create(req);
 
-        assertEquals(1, res.gameID()); // why can't it be zero? I'm still salty about this
+        assertTrue(1 <= res.gameID()); // why can't it be zero? I'm still salty about this
     }
 
     // negative

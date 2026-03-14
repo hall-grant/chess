@@ -26,6 +26,12 @@ public class ClearServiceTest {
         userService = new UserService(userDao, authDao);
         gameService = new GameService(gameDao, authDao);
         clearService = new ClearService(userDao, authDao, gameDao);
+
+        try{
+            clearService.clear();
+        }catch(DataAccessException ex){
+            throw new Error("ClearService is horribly wrong");
+        }
     }
 
     @Test

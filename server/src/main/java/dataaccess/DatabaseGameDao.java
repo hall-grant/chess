@@ -184,41 +184,6 @@ public class DatabaseGameDao {
             throw new DataAccessException("Updating game failed");
         }
 
-
-//
-//        String gameCode = gson.toJson(game.chessGame()); // serialize
-//        String whiteUsername;
-//        String blackUsername;
-//        if(game.whiteUsername() != null){
-//            whiteUsername = "'" + game.whiteUsername() + "'";
-//        } else{
-//            whiteUsername = "NULL";
-//        }
-//
-//        if (game.blackUsername() == null) {
-//            blackUsername = "NULL";
-//        } else {
-//            blackUsername = "'" + game.blackUsername() + "'";
-//        }
-//
-//        String command = "UPDATE games SET " // can't set id because of auto-increment
-//                + "whiteUsername = " + whiteUsername + ", "
-//                + "blackUsername = " + blackUsername + ", "
-//                + "gameName = '" + game.gameName() + "', "
-//                + "game = '" + gameCode + "' " + "WHERE "
-//                + "gameID = " + game.gameID();
-//
-//        try (Connection connection = DatabaseManager.getConnection();
-//        Statement statement = connection.createStatement()){
-//
-//            if(statement.executeUpdate(command) <= 0){ // returns 0 if nothing returned
-//                throw new DataAccessException("Game doesn't exist");
-//            }
-//
-//        } catch(SQLException ex){
-//            throw new DataAccessException("Updating game failed");
-//        }
-
     }
 
     public void clear() throws DataAccessException{
