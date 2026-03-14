@@ -79,15 +79,79 @@ public class DatabaseGameDao {
     }
 
     public List<GameData> listGames() throws DataAccessException{
+        List<GameData> gameList = new ArrayList<>();
+
+        String command = "SELECT gameID, whiteUsername, blackUsername, gameName, game FROM games";
+
+        try(Connection connection = DatabaseManager.getConnection();
+        Statement statement = connection.createStatement();
+        ResultSet resultSet = statement.executeQuery(command)){
+
+            while(resultSet.next()){ // goes
+                int gID = resultSet.getInt("gameID");
+                String whiteUsername = resultSet.getString("whiteUsername");
+                String blackUsername = resultSet.getString("blackUsername");
+                String name = resultSet.getString("gameName");
+
+                ChessGame game = gson.fromJson(resultSet.getString("game"), ChessGame.class);
+
+                gameList.add(new GameData(gID, whiteUsername, blackUsername, name, game));
+            }
+
+            return gameList;
+
+        } catch(SQLException ex){
+            throw new DataAccessException("Listing games failed");
+        }
 
     }
 
     public void updateGame(GameData game) throws DataAccessException{
 
+        String gameCode = gson.toJson(game.chessGame()); // serialize
+        String whiteUsername;
+        String blackUsername;
+        if(game.whiteUsername() != null){
+            whiteUsername = "'" + game.whiteUsername() + "'";
+        } else{
+            whiteUsername = "NULL";
+        }
+
+        if (game.blackUsername() == null) {
+            blackUsername = "NULL";
+        } else {
+            blackUsername = "'" + game.blackUsername() + "'";
+        }
+
+        String command = "UPDATE games SET " // can't set id because of auto-increment
+                + "whiteUsername = " + whiteUsername + ", "
+                + "blackUsername = " + blackUsername + ", "
+                + "gameName = '" + game.gameName() + "', "
+                + "game = '" + gameCode + "' " + "WHERE "
+                + "gameID = " + game.gameID();
+
+        try (Connection connection = DatabaseManager.getConnection();
+        Statement statement = connection.createStatement()){
+
+            if(statement.executeUpdate(command) <= 0){ // returns 0 if nothing returned
+                throw new DataAccessException("Game doesn't exist");
+            }
+
+        } catch(SQLException ex){
+            throw new DataAccessException("Updating game failed");
+        }
+
     }
 
     public void clear() throws DataAccessException{
+        String command = "DELETE FROM games";
 
+        try (Connection connection = DatabaseManager.getConnection();
+        Statement statement = connection.createStatement()){
+            statement.executeUpdate(command);
+        } catch(SQLException ex){
+            throw new DataAccessException("Clearing games failed");
+        }
     }
 
 }

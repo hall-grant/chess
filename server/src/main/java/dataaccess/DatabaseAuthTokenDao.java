@@ -53,7 +53,7 @@ public class DatabaseAuthTokenDao {
 
         try(Connection connection = DatabaseManager.getConnection();
         Statement statement = connection.createStatement()){
-            if(statement.executeUpdate(command) <= 0){
+            if(statement.executeUpdate(command) <= 0){ // returns 0 if nothing returned
                 throw new DataAccessException("authToken doesn't exist");
             }
         } catch(SQLException ex){
