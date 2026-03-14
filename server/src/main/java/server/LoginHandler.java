@@ -1,6 +1,7 @@
 package server;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import dataaccess.DataAccessException;
 import io.javalin.http.Context;
 import service.records.LoginRequest;
@@ -15,7 +16,7 @@ public class LoginHandler {
 
     public LoginHandler(UserService userService){
         this.service = userService;
-        gson = new Gson();
+        gson = new GsonBuilder().serializeNulls().create();
     }
 
     public void handle(Context ctx){

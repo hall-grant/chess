@@ -1,6 +1,7 @@
 package server;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import dataaccess.DataAccessException;
 import io.javalin.http.Context;
 import service.GameService;
@@ -15,7 +16,7 @@ public class JoinHandler {
 
     public JoinHandler(GameService gameService){
         this.gameService = gameService;
-        gson = new Gson();
+        gson = new GsonBuilder().serializeNulls().create();
     }
 
     public void handle(Context ctx){

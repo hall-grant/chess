@@ -113,7 +113,7 @@ public class DatabaseManager {
         // don't auto increment gameID for now. maybe change later if bugs
         String command = """
                 CREATE TABLE IF NOT EXISTS games (
-                gameID INT PRIMARY KEY,
+                gameID INT AUTO_INCREMENT PRIMARY KEY,
                 whiteUsername VARCHAR(128),
                 blackUsername VARCHAR(128),
                 gameName VARCHAR(128) NOT NULL,

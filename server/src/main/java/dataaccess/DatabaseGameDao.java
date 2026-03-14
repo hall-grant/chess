@@ -1,6 +1,7 @@
 package dataaccess;
 
 import chess.ChessGame;
+import com.google.gson.GsonBuilder;
 import model.GameData;
 import model.UserData;
 
@@ -17,9 +18,9 @@ import java.util.HashMap;
 
 public class DatabaseGameDao {
 
-    private final Gson gson = new Gson();
+    private final Gson gson = new GsonBuilder().serializeNulls().create();
 
-    public void createGame(GameData gameData) throws DataAccessException{
+    public int createGame(GameData gameData) throws DataAccessException{
         String gameCode = gson.toJson(gameData.chessGame()); // serialize
         String whiteUsername;
         String blackUsername;
@@ -36,8 +37,8 @@ public class DatabaseGameDao {
         }
 
 
-        String command = "INSERT INTO games(gameID, whiteUsername, blackUsername, gameName, game) VALUES ("
-                + gameData.gameID() + ", "
+        // shouldn't assign gameIDs
+        String command = "INSERT INTO games(whiteUsername, blackUsername, gameName, game) VALUES ("
                 + whiteUsername + ", " // quotes not needed
                 + blackUsername + ", '"
                 + gameData.gameName() + "', '"
@@ -46,7 +47,15 @@ public class DatabaseGameDao {
         try (Connection connection = DatabaseManager.getConnection();
         Statement statement = connection.createStatement()){
 
-            statement.executeUpdate(command);
+            statement.executeUpdate(command, Statement.RETURN_GENERATED_KEYS); // should be able to pull gameID
+
+            try (ResultSet resultSet = statement.getGeneratedKeys()){
+                if(resultSet.next()){
+                    return resultSet.getInt(1); // returns gameID
+                }else{
+                    throw new DataAccessException("Getting gameID failed");
+                }
+            }
 
         } catch(SQLException ex){
             throw new DataAccessException("Creation of game failed");
@@ -93,9 +102,14 @@ public class DatabaseGameDao {
                 String blackUsername = resultSet.getString("blackUsername");
                 String name = resultSet.getString("gameName");
 
-                ChessGame game = gson.fromJson(resultSet.getString("game"), ChessGame.class);
-
-                gameList.add(new GameData(gID, whiteUsername, blackUsername, name, game));
+                ChessGame game;
+                String gameCode = resultSet.getString("game");
+                if(gameCode == null || gameCode.isEmpty()){
+                    game = new ChessGame();
+                } else {
+                    game = gson.fromJson(gameCode, ChessGame.class);
+                    gameList.add(new GameData(gID, whiteUsername, blackUsername, name, game));
+                }
             }
 
             return gameList;

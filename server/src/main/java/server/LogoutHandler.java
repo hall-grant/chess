@@ -1,6 +1,7 @@
 package server;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import dataaccess.DataAccessException;
 import io.javalin.http.Context;
 import service.records.LogoutRequest;
@@ -16,7 +17,7 @@ public class LogoutHandler {
 
     public LogoutHandler(UserService userService){
         this.userService = userService;
-        gson = new Gson();
+        gson = new GsonBuilder().serializeNulls().create();
     }
 
     public void handle(Context ctx){

@@ -1,6 +1,7 @@
 package service;
 
 import chess.ChessGame;
+import com.google.gson.GsonBuilder;
 import dataaccess.DataAccessException;
 import dataaccess.DatabaseAuthTokenDao;
 import dataaccess.DatabaseGameDao;
@@ -12,16 +13,20 @@ import service.records.*;
 import java.util.ArrayList;
 import java.util.List;
 
+
+
+import com.google.gson.Gson; // for testing.
+
 public class GameService {
 
     private final DatabaseGameDao gameDao;
     private final DatabaseAuthTokenDao authDao;
-    private int gameID;
+    // private int gameID;
 
     public GameService(DatabaseGameDao gameDao, DatabaseAuthTokenDao authDao){
         this.gameDao = gameDao;
         this.authDao = authDao;
-        gameID = 1; // can't start at 0? why would you be like this, tests?
+        // gameID = 1; // can't start at 0? why would you be like this, tests?
     }
 
     public CreateResult create(CreateRequest r) throws DataAccessException{
@@ -34,8 +39,11 @@ public class GameService {
             throw new DataAccessException("bad request");
         }
 
-        int gameID = this.gameID;
-        this.gameID++;
+//        int gameID = this.gameID;
+//        this.gameID++;
+
+        GameData nGame = new GameData(0, null, null, r.gameName(), new ChessGame());
+
 
         gameDao.createGame(new GameData(gameID, null, null, r.gameName(), new ChessGame()));
 
@@ -53,6 +61,13 @@ public class GameService {
         List<GameReturn> returns = new ArrayList<>();
         for(GameData game : gameDao.listGames()){
             returns.add(new GameReturn(game.gameID(), game.gameName(), game.whiteUsername(), game.blackUsername()));
+        }
+
+        Gson gson = new GsonBuilder().serializeNulls().create(); // to fix null serialization error
+        System.out.println(gson.toJson(new ListResult(returns)));
+
+        for(GameReturn gameReturn : returns){
+            System.out.println(gameReturn);
         }
 
         return new ListResult(returns);
