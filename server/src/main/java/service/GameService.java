@@ -63,11 +63,11 @@ public class GameService {
         }
 
         Gson gson = new GsonBuilder().serializeNulls().create(); // to fix null serialization error
-        System.out.println(gson.toJson(new ListResult(returns)));
+        // System.out.println(gson.toJson(new ListResult(returns)));
 
-        for(GameReturn gameReturn : returns){
-            System.out.println(gameReturn);
-        }
+//        for(GameReturn gameReturn : returns){
+//            System.out.println(gameReturn);
+//        }
 
         return new ListResult(returns);
 

@@ -114,9 +114,9 @@ public class DatabaseManager {
         String command = """
                 CREATE TABLE IF NOT EXISTS games (
                 gameID INT AUTO_INCREMENT PRIMARY KEY,
-                whiteUsername VARCHAR(128),
-                blackUsername VARCHAR(128),
-                gameName VARCHAR(128) NOT NULL,
+                whiteUsername VARCHAR(255),
+                blackUsername VARCHAR(255),
+                gameName VARCHAR(255) NOT NULL,
                 game TEXT NOT NULL)
                 """; // game should probably be a TEXT
         try (Connection connection = getConnection();

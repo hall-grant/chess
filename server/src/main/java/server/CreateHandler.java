@@ -21,12 +21,21 @@ public class CreateHandler {
 
     public void handle(Context ctx){
         try{
+
+            String authToken = ctx.header("Authorization");
+            if(authToken == null){
+                ctx.status(401);
+                ctx.result(gson.toJson(Map.of("message", "Error: unauthorized")));
+                return;
+            }
+
             Map body = gson.fromJson(ctx.body(), Map.class);
 
             String gameName = null;
 
             if (body != null && body.get("gameName") != null) {
                 gameName = body.get("gameName").toString();
+                // System.out.println("gameName = " + body.get("gameName"));
             }
 
             CreateRequest req = new CreateRequest(ctx.header("Authorization"), gameName);
