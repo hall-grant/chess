@@ -33,7 +33,7 @@ public class DatabaseAuthDaoTest {
 
         authDao.createAuth(authData);
 
-        AuthData getAuth = authDao.getAuth("token");
+        AuthData getAuth = authDao.getAuth("authToken");
 
         assertNotNull(getAuth);
 
