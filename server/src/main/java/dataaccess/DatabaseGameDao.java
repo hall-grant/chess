@@ -23,20 +23,6 @@ public class DatabaseGameDao {
 
     public int createGame(GameData gameData) throws DataAccessException{
         String gameCode = gson.toJson(gameData.chessGame()); // serialize
-//        String whiteUsername;
-//        if(gameData.whiteUsername() != null){
-//            whiteUsername = "'" + gameData.whiteUsername() + "'";
-//        } else{
-//            whiteUsername = "NULL";
-//        }
-//
-//        String blackUsername;
-//        if (gameData.blackUsername() == null) {
-//            blackUsername = "NULL";
-//        } else {
-//            blackUsername = "'" + gameData.blackUsername() + "'";
-//        }
-
 
         // shouldn't assign gameIDs
         String command = "INSERT INTO games(whiteUsername, blackUsername, gameName, game) VALUES (?, ?, ?, ?)";
@@ -70,21 +56,6 @@ public class DatabaseGameDao {
             }
 
             throw new DataAccessException("Getting gameID failed");
-
-
-//
-//
-//            statement.executeUpdate(command, Statement.RETURN_GENERATED_KEYS); // should be able to pull gameID
-//
-//
-//
-//            try (ResultSet resultSet = statement.getGeneratedKeys()){
-//                if(resultSet.next()){
-//                    return resultSet.getInt(1); // returns gameID
-//                }else{
-//                    throw new DataAccessException("Getting gameID failed");
-//                }
-//            }
 
         } catch(SQLException ex){
             ex.printStackTrace();

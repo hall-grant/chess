@@ -26,7 +26,6 @@ public class GameService {
     public GameService(DatabaseGameDao gameDao, DatabaseAuthTokenDao authDao){
         this.gameDao = gameDao;
         this.authDao = authDao;
-        // gameID = 1; // can't start at 0? why would you be like this, tests?
     }
 
     public CreateResult create(CreateRequest r) throws DataAccessException{
@@ -38,9 +37,6 @@ public class GameService {
         if(r.gameName() == null){
             throw new DataAccessException("bad request");
         }
-
-//        int gameID = this.gameID;
-//        this.gameID++;
 
         GameData nGame = new GameData(0, null, null, r.gameName(), new ChessGame());
 
@@ -63,11 +59,6 @@ public class GameService {
         }
 
         Gson gson = new GsonBuilder().serializeNulls().create(); // to fix null serialization error
-        // System.out.println(gson.toJson(new ListResult(returns)));
-
-//        for(GameReturn gameReturn : returns){
-//            System.out.println(gameReturn);
-//        }
 
         return new ListResult(returns);
 

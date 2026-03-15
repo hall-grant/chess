@@ -60,7 +60,7 @@ public class DatabaseGameDaoTest {
     @Test
     void getGamePositive() throws DataAccessException{
 
-        GameData game = new GameData(0, null, null, "game", new ChessGame());
+        GameData game = new GameData(0, null, null, "CodeQualitySucks", new ChessGame());
 
         int gameID = gameDao.createGame(game);
 

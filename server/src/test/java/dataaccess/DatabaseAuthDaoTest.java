@@ -60,15 +60,16 @@ public class DatabaseAuthDaoTest {
     @Test
     void getAuthPositive() throws DataAccessException{
 
-        AuthData authData = new AuthData("authToken", "user");
+        AuthData authData = new AuthData("authToken", "CodeQuality");
 
         authDao.createAuth(authData);
 
         AuthData getAuth = authDao.getAuth("authToken");
 
         assertNotNull(getAuth);
+        assertEquals("CodeQuality", getAuth.userName());
         assertEquals("authToken", getAuth.authToken());
-        assertEquals("user", getAuth.userName());
+
 
     }
 
