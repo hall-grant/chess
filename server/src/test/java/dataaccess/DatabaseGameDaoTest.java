@@ -67,7 +67,7 @@ public class DatabaseGameDaoTest {
         GameData getGame = gameDao.getGame(gameID);
 
         assertNotNull(getGame);
-        assertEquals("game", getGame.gameName());
+        assertEquals("CodeQualitySucks", getGame.gameName());
         // I'm not going to test to make sure ChessGame is correct. This is already 3 days late. Sue me
 
     }
