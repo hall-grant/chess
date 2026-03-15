@@ -1,6 +1,8 @@
 package dataaccess;
 
 import chess.ChessGame;
+import chess.ChessMove;
+import chess.ChessPosition;
 import model.AuthData;
 import model.GameData;
 import org.junit.jupiter.api.BeforeEach;
@@ -130,6 +132,45 @@ public class DatabaseGameDaoTest {
         assertEquals("white", result.whiteUsername());
         assertEquals("black", result.blackUsername());
 
+    }
+
+    // positive
+    // forgor I also need to test for persistence as per spec
+    @Test
+    void updateGameBoardState() throws DataAccessException{
+
+        ChessGame game = new ChessGame();
+
+        int gameID = gameDao.createGame(new GameData(0, null, null, "game", game));
+
+        GameData newGame = gameDao.getGame(gameID);
+
+        // making move
+        ChessGame board = newGame.chessGame();
+
+        // why do I need a try catch block for an exception in a test? just fail the test dude.
+        try{
+            // doesn't even  need to be valid, I think. issues__
+            board.makeMove(new ChessMove(
+                    new ChessPosition(2,1),
+                    new ChessPosition(3,1),
+                    null));
+        }catch(Exception ex){
+            throw new DataAccessException(ex.getMessage());
+        }
+
+        GameData updatedGame = new GameData(
+                gameID,
+                newGame.whiteUsername(),
+                newGame.blackUsername(),
+                newGame.gameName(),
+                board);
+
+        gameDao.updateGame(updatedGame);
+
+        GameData result = gameDao.getGame(gameID);
+
+        assertNotNull(result.chessGame().getBoard());
     }
 
     // negative
