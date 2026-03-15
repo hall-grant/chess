@@ -60,14 +60,14 @@ public class DatabaseGameDaoTest {
     @Test
     void getGamePositive() throws DataAccessException{
 
-        GameData game = new GameData(0, null, null, "CodeQualitySucks", new ChessGame());
+        GameData game = new GameData(0, null, null, "CodeQuality", new ChessGame());
 
         int gameID = gameDao.createGame(game);
 
         GameData getGame = gameDao.getGame(gameID);
 
         assertNotNull(getGame);
-        assertEquals("CodeQualitySucks", getGame.gameName());
+        assertEquals("CodeQuality", getGame.gameName());
         // I'm not going to test to make sure ChessGame is correct. This is already 3 days late. Sue me
 
     }
