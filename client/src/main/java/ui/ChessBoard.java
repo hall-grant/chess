@@ -27,21 +27,21 @@ public class ChessBoard {
         this.board = board;
     }
 
-    public static void main(String[] args){
-
-        var board = new chess.ChessBoard();
-        board.resetBoard();
-
-        var whiteBoard = new ChessBoard(ChessGame.TeamColor.WHITE, board);
-        var blackBoard = new ChessBoard(ChessGame.TeamColor.BLACK, board);
-
-        System.out.println("White:\n");
-        whiteBoard.draw();
-
-        System.out.println("Black:\n");
-        blackBoard.draw();
-
-    }
+//    public static void main(String[] args){
+//
+//        var board = new chess.ChessBoard();
+//        board.resetBoard();
+//
+//        var whiteBoard = new ChessBoard(ChessGame.TeamColor.WHITE, board);
+//        var blackBoard = new ChessBoard(ChessGame.TeamColor.BLACK, board);
+//
+//        System.out.println("White:\n");
+//        whiteBoard.draw();
+//
+//        System.out.println("Black:\n");
+//        blackBoard.draw();
+//
+//    }
 
     public void draw(){
         var out = new PrintStream(System.out, true, StandardCharsets.UTF_8);
