@@ -58,6 +58,10 @@ public class ChessBoard {
         out.print(RESET_TEXT_COLOR);
         drawColumnNames();
 
+        out.print(RESET_BG_COLOR);
+        out.print(RESET_TEXT_COLOR);
+        out.println("\n");
+
     }
 
 
@@ -78,8 +82,11 @@ public class ChessBoard {
             stringBuilder.append(" ").append(letter).append(" ");
         }
 
+        System.out.print(SET_BG_COLOR_BLACK);
+        System.out.print(SET_TEXT_COLOR_WHITE);
         System.out.print(stringBuilder);
-        System.out.print("\n");
+        System.out.print(EMPTY);
+        //System.out.print("\n");
     }
 
 
@@ -154,10 +161,15 @@ public class ChessBoard {
 
                 }
 
-            }
 
+            }
+            System.out.print(SET_BG_COLOR_BLACK);
+            System.out.print(SET_TEXT_COLOR_WHITE);
+            System.out.print(" " + row + " ");
+            System.out.print(RESET_BG_COLOR);
 
         }
+        System.out.println();
     }
 
 
