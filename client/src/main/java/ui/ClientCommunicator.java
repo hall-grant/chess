@@ -85,7 +85,25 @@ public class ClientCommunicator {
         try{
             var builder = HttpRequest.newBuilder().uri(URI.create(serverUrl + "/session"));
 
+            builder.header("Authorization", req.authToken());
 
+            builder.DELETE();
+            HttpRequest request = builder.build();
+
+            var response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+            System.out.println("Status: " + response.statusCode());
+            System.out.println("Body: " + response.body());
+
+            if(response.statusCode() != 200){
+                Map error = gson.fromJson(response.body(), Map.class);
+                throw new Exception((String) error.get("message"));
+            }
+
+            return gson.fromJson(response.body(), LogoutResult.class);
+        }catch(Exception ex){
+            ex.printStackTrace();
+            throw ex;
         }
     }
 

@@ -1,6 +1,7 @@
 package ui;
 
 import records.LoginRequest;
+import records.LogoutRequest;
 import records.RegisterRequest;
 import records.RegisterResult;
 
@@ -176,7 +177,18 @@ public class Client {
     }
 
     private void logout() {
+        System.out.println("Entering CC logout method");
 
+        try{
+            LogoutRequest req = new LogoutRequest(authToken);
+            authToken = null;
+
+            var res = server.logout(req);
+
+            System.out.println("logged out");
+        }catch(Exception ex){
+            System.out.println(ex.getMessage());
+        }
     }
 
     private void list() {

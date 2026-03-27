@@ -18,10 +18,10 @@ public class ServerFacade {
     public LoginResult login(LoginRequest req) throws Exception{
         return clientCommunicator.login(req);
     }
-//
-//    public LogoutResult logout(LogoutRequest req){
-//
-//    }
+
+    public LogoutResult logout(LogoutRequest req) throws Exception{
+        return clientCommunicator.logout(req);
+    }
 //
 //    public ListResult list(ListRequest req){
 //
