@@ -80,7 +80,12 @@ public class Client {
     }
 
     private void preLoginHelp() {
-        System.out.println("helping");
+        System.out.println("\nType a command [1, 2, 3, or 4]:\n" +
+                "1 - Register: \n  Create a new account with provided username, password, and email.\n\n" +
+                "2 - Login: \n  Login into existing account with username and password.\n\n" +
+                "3 - Help: \n  Displays this message.\n\n" +
+                "4 - Quit: \n  Exit this program.\n\n\n"
+        );
     }
 
     private void login() {
@@ -171,7 +176,14 @@ public class Client {
     }
 
     private void postLoginHelp() {
-
+        System.out.println("\nType a command [1, 2, 3, or 4]:\n\n" +
+                "1 - Logout: \n  Logs you out and returns to login message.\n\n" +
+                "2 - List games: \n  List all active games with an associated ID.\n\n" +
+                "3 - Create a game: \n  Create a new chess game with the name provided.\n\n" +
+                "4 - Join a game: \n  Join an existing game. Join game as white or black.\n\n" +
+                "5 - Observe a game: \n  Spectate an existing game.\n\n" +
+                "6 - Help: \n  Display this help screen.\n\n\n"
+        );
     }
 
     // according to spec, this is technically all I need. Come back in phase6
