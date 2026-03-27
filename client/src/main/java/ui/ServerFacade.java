@@ -28,7 +28,7 @@ public class ServerFacade {
     }
 
     public CreateResult create(CreateRequest req) throws Exception{
-
+        return clientCommunicator.create(req);
     }
 
     public JoinResult join(JoinRequest req) throws Exception{

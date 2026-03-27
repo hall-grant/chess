@@ -218,7 +218,27 @@ public class Client {
     }
 
     private void create() {
+        System.out.println("creating game");
 
+        try{
+            System.out.print("Enter game name: ");
+            String gameName = scanner.nextLine();
+
+            if(gameName.isBlank()){
+                System.out.println("Invalid game name");
+                return;
+            }
+
+
+            CreateRequest req = new CreateRequest(authToken, gameName);
+
+            var res = server.create(req);
+
+            System.out.println("Game " + gameName + " created with ID " + res.gameID() + ".");
+
+        }catch(Exception ex){
+            System.out.println(ex.getMessage());
+        }
     }
 
     private void join() {
