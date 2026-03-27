@@ -35,8 +35,8 @@ public class ServerFacade {
         return clientCommunicator.join(req);
     }
 
-//    public ClearResult clear(){
-//
-//    }
+    public ClearResult clear() throws Exception{
+        return clientCommunicator.clear();
+    }
 
 }

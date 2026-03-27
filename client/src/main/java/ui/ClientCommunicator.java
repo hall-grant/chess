@@ -189,6 +189,26 @@ public class ClientCommunicator {
         }
     }
 
+    public ClearResult clear() throws Exception{
+        try{
+            var builder = HttpRequest.newBuilder().uri(URI.create(serverUrl + "/db"));
+            builder.DELETE();
+
+            HttpRequest request = builder.build();
+
+            var response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+            if(response.statusCode() != 200){
+                Map error = gson.fromJson(response.body(), Map.class);
+                throw new Exception((String) error.get("message"));
+            }
+
+            return gson.fromJson(response.body(), ClearResult.class);
+        }catch(Exception ex){
+            throw ex;
+        }
+    }
+
 
 
 }
