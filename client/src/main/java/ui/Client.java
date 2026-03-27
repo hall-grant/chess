@@ -1,13 +1,23 @@
 package ui;
 
+import records.RegisterRequest;
+import records.RegisterResult;
+
 import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
 import java.util.Scanner;
 
 public class Client {
 
+    private final Scanner scanner = new Scanner(System.in);
+    private final ServerFacade server;
+
+    public Client(int port){
+        server = new ServerFacade(port);
+    }
+
     public static void main(String[] args){
-        Client client = new Client();
+        Client client = new Client(8080);
         client.run();
     }
 
@@ -17,16 +27,16 @@ public class Client {
         var out = new PrintStream(System.out, true, StandardCharsets.UTF_8);
 
         out.println("loop started");
-        Scanner scanner = new Scanner(System.in);
+
 
 
         while (true){
             if(authToken == null){
-                if(preLogin(scanner)){
+                if(preLogin()){
                     break;
                 }
             }else{
-                if(postLogin(scanner)){
+                if(postLogin()){
                     break;
                 }
             }
@@ -35,7 +45,7 @@ public class Client {
     }
 
 
-    private Boolean preLogin(Scanner scanner) {
+    private Boolean preLogin() {
         System.out.println("Hello. Pre-login:");
 
         String message =
@@ -76,9 +86,29 @@ public class Client {
 
     private void register() {
         System.out.println("registering");
+        try{
+            System.out.print("Username: ");
+            String username = scanner.nextLine();
+
+            System.out.print("Password: ");
+            String password = scanner.nextLine();
+
+            System.out.print("Email: ");
+            String email = scanner.nextLine();
+
+            RegisterRequest req = new RegisterRequest(username, password, email);
+
+            var res = server.register(req);
+
+            authToken = res.authToken();
+
+            System.out.println("registered");
+        }catch(Exception ex){
+            System.out.println(ex.getMessage()); // change this later.
+        }
     }
 
-    private boolean postLogin(Scanner scanner) {
+    private boolean postLogin() {
 
         System.out.println("Hello. Post-login:");
 
