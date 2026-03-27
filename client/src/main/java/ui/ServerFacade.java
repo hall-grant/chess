@@ -22,11 +22,11 @@ public class ServerFacade {
     public LogoutResult logout(LogoutRequest req) throws Exception{
         return clientCommunicator.logout(req);
     }
-//
-//    public ListResult list(ListRequest req){
-//
-//    }
-//
+
+    public ListResult list(ListRequest req) throws Exception{
+        return clientCommunicator.list(req);
+    }
+
 //    public CreateResult create(CreateRequest req){
 //
 //    }

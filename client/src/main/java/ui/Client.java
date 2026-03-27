@@ -1,18 +1,18 @@
 package ui;
 
-import records.LoginRequest;
-import records.LogoutRequest;
-import records.RegisterRequest;
-import records.RegisterResult;
+import records.*;
 
 import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class Client {
 
     private final Scanner scanner = new Scanner(System.in);
     private final ServerFacade server;
+    private List<GameReturn> games = new ArrayList<>();
 
     public Client(int port){
         server = new ServerFacade(port);
@@ -177,7 +177,7 @@ public class Client {
     }
 
     private void logout() {
-        System.out.println("Entering CC logout method");
+        System.out.println("logging out");
 
         try{
             LogoutRequest req = new LogoutRequest(authToken);
@@ -192,7 +192,27 @@ public class Client {
     }
 
     private void list() {
+        System.out.println("listing games");
 
+        try{
+            var res = server.list(new ListRequest(authToken));
+
+            games = res.games();
+
+            if(games.isEmpty()){
+                System.out.println("no games :(");
+                return;
+            }
+
+            for(int i = 0; i < games.size(); i++){
+                GameReturn game = games.get(i);
+                System.out.println((i + 1) + " - " + game.gameName() +
+                        ": White player: " + game.whiteUsername() +
+                        " Black player: " + game.blackUsername());
+            }
+        }catch(Exception ex){
+            System.out.println(ex.getMessage());
+        }
     }
 
     private void create() {
