@@ -25,7 +25,7 @@ public class ClientCommunicator {
 
     // should I be using DataAccessException?
     public RegisterResult register(RegisterRequest req) throws Exception{
-        System.out.println("Entering CC register method");
+        // System.out.println("Entering CC register method");
 
         try {
             var builder = HttpRequest.newBuilder().uri(URI.create(serverUrl + "/user"));
@@ -36,8 +36,8 @@ public class ClientCommunicator {
 
             var response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-            System.out.println("Status: " + response.statusCode());
-            System.out.println("Body: " + response.body());
+            // System.out.println("Status: " + response.statusCode());
+            // System.out.println("Body: " + response.body());
 
             if (response.statusCode() != 200) {
                 Map error = gson.fromJson(response.body(), Map.class);
@@ -46,13 +46,13 @@ public class ClientCommunicator {
 
             return gson.fromJson(response.body(), RegisterResult.class);
         }catch(Exception ex){
-            ex.printStackTrace(); // debugging
+            // ex.printStackTrace(); // debugging
             throw ex;
         }
     }
 
     public LoginResult login(LoginRequest req) throws Exception{
-        System.out.println("entering CC login method");
+        // System.out.println("entering CC login method");
 
         try{
             var builder = HttpRequest.newBuilder().uri(URI.create(serverUrl + "/session"));
@@ -63,8 +63,8 @@ public class ClientCommunicator {
 
             var response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-            System.out.println("Status: " + response.statusCode());
-            System.out.println("Body: " + response.body());
+            // System.out.println("Status: " + response.statusCode());
+            // System.out.println("Body: " + response.body());
 
             if(response.statusCode() != 200){
                 Map error = gson.fromJson(response.body(), Map.class);
@@ -74,13 +74,13 @@ public class ClientCommunicator {
             return gson.fromJson(response.body(), LoginResult.class);
 
         } catch(Exception ex){
-            ex.printStackTrace();
+            // ex.printStackTrace();
             throw ex;
         }
     }
 
     public LogoutResult logout(LogoutRequest req) throws Exception{
-        System.out.println("entering CC logout method");
+        // System.out.println("entering CC logout method");
 
         try{
             var builder = HttpRequest.newBuilder().uri(URI.create(serverUrl + "/session"));
@@ -92,8 +92,8 @@ public class ClientCommunicator {
 
             var response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-            System.out.println("Status: " + response.statusCode());
-            System.out.println("Body: " + response.body());
+            // System.out.println("Status: " + response.statusCode());
+            // System.out.println("Body: " + response.body());
 
             if(response.statusCode() != 200){
                 Map error = gson.fromJson(response.body(), Map.class);
@@ -102,13 +102,13 @@ public class ClientCommunicator {
 
             return gson.fromJson(response.body(), LogoutResult.class);
         }catch(Exception ex){
-            ex.printStackTrace();
+            // ex.printStackTrace();
             throw ex;
         }
     }
 
     public ListResult list(ListRequest req) throws Exception{
-        System.out.println("entering CC list method");
+        // System.out.println("entering CC list method");
 
         try{
             var builder = HttpRequest.newBuilder().uri(URI.create(serverUrl + "/game"));
@@ -119,8 +119,8 @@ public class ClientCommunicator {
 
             var response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-            System.out.println("Status: " + response.statusCode());
-            System.out.println("Body: " + response.body());
+            // System.out.println("Status: " + response.statusCode());
+            // System.out.println("Body: " + response.body());
 
             if(response.statusCode() != 200){
                 Map error = gson.fromJson(response.body(), Map.class);
@@ -129,13 +129,13 @@ public class ClientCommunicator {
 
             return gson.fromJson(response.body(), ListResult.class);
         }catch(Exception ex){
-            ex.printStackTrace();
+            // ex.printStackTrace();
             throw ex;
         }
     }
 
     public JoinResult join(JoinRequest req) throws Exception{
-        System.out.println("entering CC join method");
+        // System.out.println("entering CC join method");
 
         try{
             var builder = HttpRequest.newBuilder().uri(URI.create(serverUrl + "/game"));
@@ -146,8 +146,8 @@ public class ClientCommunicator {
 
             var response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-            System.out.println("Status: " + response.statusCode());
-            System.out.println("Body: " + response.body());
+            // System.out.println("Status: " + response.statusCode());
+            // System.out.println("Body: " + response.body());
 
             if(response.statusCode() != 200){
                 Map error = gson.fromJson(response.body(), Map.class);
@@ -157,13 +157,13 @@ public class ClientCommunicator {
             return gson.fromJson(response.body(), JoinResult.class);
 
         }catch(Exception ex){
-            ex.printStackTrace();
+            // ex.printStackTrace();
             throw ex;
         }
     }
 
     public CreateResult create(CreateRequest req) throws Exception{
-        System.out.println("Entering CC create method");
+        // System.out.println("Entering CC create method");
 
         try{
             var builder = HttpRequest.newBuilder().uri(URI.create(serverUrl + "/game"));
@@ -174,8 +174,8 @@ public class ClientCommunicator {
 
             var response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-            System.out.println("Status: " + response.statusCode());
-            System.out.println("Body: " + response.body());
+            // System.out.println("Status: " + response.statusCode());
+            // System.out.println("Body: " + response.body());
 
             if(response.statusCode() != 200){
                 Map error = gson.fromJson(response.body(), Map.class);
@@ -184,7 +184,7 @@ public class ClientCommunicator {
 
             return gson.fromJson(response.body(), CreateResult.class);
         }catch(Exception ex){
-            ex.printStackTrace();
+            // ex.printStackTrace();
             throw ex;
         }
     }

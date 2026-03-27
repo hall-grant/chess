@@ -30,7 +30,7 @@ public class Client {
     public void run(){
         var out = new PrintStream(System.out, true, StandardCharsets.UTF_8);
 
-        out.println("loop started");
+        // out.println("loop started");
 
 
 
@@ -50,7 +50,7 @@ public class Client {
 
 
     private Boolean preLogin() {
-        System.out.println("Hello. Pre-login:");
+        System.out.println("Welcome. Enter a command: ");
 
         String message =
                 "1 - Login\n" +
@@ -89,7 +89,7 @@ public class Client {
     }
 
     private void login() {
-        System.out.println("logging in");
+        // System.out.println("logging in");
         try{
             System.out.print("Username: ");
             String username = scanner.nextLine();
@@ -103,14 +103,14 @@ public class Client {
 
             authToken = res.authToken();
 
-            System.out.println("Logged in");
+            System.out.println("Logged in successfully.");
         } catch(Exception ex){
-            System.out.println(ex.getMessage()); // debugging
+            System.out.println("Error: Something went wrong"); // debugging
         }
     }
 
     private void register() {
-        System.out.println("registering");
+        // System.out.println("registering");
         try{
             System.out.print("Username: ");
             String username = scanner.nextLine();
@@ -127,15 +127,15 @@ public class Client {
 
             authToken = res.authToken();
 
-            System.out.println("registered");
+            System.out.println("Registered successfully.");
         }catch(Exception ex){
-            System.out.println(ex.getMessage()); // change this later.
+            System.out.println("Error: Something went wrong"); // change this later.
         }
     }
 
     private boolean postLogin() {
 
-        System.out.println("Hello. Post-login:");
+        // System.out.println("Hello. Post-login:");
 
         String message =
                 "1 - logout\n" +
@@ -188,7 +188,7 @@ public class Client {
 
     // according to spec, this is technically all I need. Come back in phase6
     private void observe() {
-        System.out.println("observing");
+        // System.out.println("observing");
 
 
         if(games == null || games.isEmpty()){
@@ -219,7 +219,7 @@ public class Client {
     }
 
     private void logout() {
-        System.out.println("logging out");
+        // System.out.println("logging out");
 
         try{
             LogoutRequest req = new LogoutRequest(authToken);
@@ -227,14 +227,14 @@ public class Client {
 
             var res = server.logout(req);
 
-            System.out.println("logged out");
+            System.out.println("Logged out successfully");
         }catch(Exception ex){
-            System.out.println(ex.getMessage());
+            System.out.println("Error: Something went wrong");
         }
     }
 
     private void list() {
-        System.out.println("listing games");
+        // System.out.println("listing games");
 
         try{
             var res = server.list(new ListRequest(authToken));
@@ -242,23 +242,24 @@ public class Client {
             games = res.games();
 
             if(games.isEmpty()){
-                System.out.println("no games :(");
+                System.out.println("No games available.");
                 return;
             }
 
             for(int i = 0; i < games.size(); i++){
                 GameReturn game = games.get(i);
-                System.out.println((i + 1) + " - " + game.gameName() +
+                System.out.println("[" + (i + 1) + "] - " + game.gameName() +
                         ": White player: " + game.whiteUsername() +
                         " Black player: " + game.blackUsername());
             }
+            System.out.println();
         }catch(Exception ex){
-            System.out.println(ex.getMessage());
+            System.out.println("Error: Something went wrong");
         }
     }
 
     private void create() {
-        System.out.println("creating game");
+        // System.out.println("creating game");
 
         try{
             System.out.print("Enter game name: ");
@@ -274,15 +275,15 @@ public class Client {
 
             var res = server.create(req);
 
-            System.out.println("Game " + gameName + " created with ID " + res.gameID() + ".");
+            System.out.println("Game " + gameName + " created.");
 
         }catch(Exception ex){
-            System.out.println(ex.getMessage());
+            System.out.println("Error: Something went wrong");
         }
     }
 
     private void join() {
-        System.out.println("joinging a game");
+        // System.out.println("joinging a game");
 
         try{
             if(games == null || games.isEmpty()){
@@ -301,7 +302,7 @@ public class Client {
                     return;
                 }
             }catch(Exception ex){
-                System.out.println("Invalid game id");
+                System.out.println("Invalid game ID");
                 return;
             }
 
@@ -336,7 +337,7 @@ public class Client {
                 drawBoard(ChessGame.TeamColor.BLACK);
             }
         }catch(Exception ex){
-            System.out.println(ex.getMessage());
+            System.out.println("Error: Something went wrong");
         }
     }
 
@@ -389,7 +390,7 @@ public class Client {
             drawBoard(ChessGame.TeamColor.WHITE);
 
         }catch(Exception ex){
-            System.out.println(ex.getMessage());
+            System.out.println("Error: Something went wrong");
         }
     }
  */
