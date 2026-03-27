@@ -1,5 +1,7 @@
 package ui;
 
+import chess.ChessBoard;
+import chess.ChessGame;
 import records.*;
 
 import java.io.PrintStream;
@@ -12,7 +14,7 @@ public class Client {
 
     private final Scanner scanner = new Scanner(System.in);
     private final ServerFacade server;
-    private List<GameReturn> games = new ArrayList<>();
+    private List<GameReturn> games = new ArrayList<>(); // mapping
 
     public Client(int port){
         server = new ServerFacade(port);
@@ -134,7 +136,7 @@ public class Client {
                 "1 - logout\n" +
                 "2 - list games\n" +
                 "3 - create a game\n" +
-                "4 - play a game\n" +
+                "4 - join a game\n" +
                 "5 - observe a game\n" +
                 "6 - help\n";
 
@@ -220,8 +222,73 @@ public class Client {
     }
 
     private void join() {
+        System.out.println("joinging a game");
 
+        try{
+            if(games == null || games.isEmpty()){
+                System.out.println("List games first. If no games available, create one.");
+                return;
+            }
+
+            System.out.print("Enter game id: ");
+            int gameId;
+            try{
+                // gameId = (int) scanner.nextLine();
+                gameId = Integer.parseInt(scanner.nextLine());
+
+                if(gameId < 1 || gameId > games.size()){
+                    System.out.println("Invalid game id.");
+                    return;
+                }
+            }catch(Exception ex){
+                System.out.println("Invalid game id");
+                return;
+            }
+
+
+            int gameIdReal = games.get(gameId - 1).gameID();
+
+            System.out.print("Enter color [white/black] or [w/b]: ");
+            String color = scanner.nextLine().toLowerCase();
+
+            if(color.equals("w")){
+                color = "white";
+            }else if(color.equals("b")){
+                color = "black";
+            }
+
+            if(!color.equals("white") && !color.equals("black")){
+                System.out.println("Invalid color");
+                return;
+            }
+
+
+            JoinRequest req = new JoinRequest(authToken, gameIdReal, color.toUpperCase());
+
+            var res = server.join(req);
+
+            System.out.println("Joined game " + games.get(gameId - 1).gameName() + " as " + color + ".");
+
+
+            if(color.equals("white")){
+                drawBoard(ChessGame.TeamColor.WHITE);
+            }else{
+                drawBoard(ChessGame.TeamColor.BLACK);
+            }
+        }catch(Exception ex){
+            System.out.println(ex.getMessage());
+        }
     }
 
 
+    // change in phase 6
+    private void drawBoard(ChessGame.TeamColor teamColor){
+        chess.ChessBoard board = new ChessBoard();
+        board.resetBoard();
+
+        ui.ChessBoard printBoard = new ui.ChessBoard(teamColor, board);
+        printBoard.draw();
+    }
 }
+
+

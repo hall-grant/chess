@@ -27,14 +27,14 @@ public class ServerFacade {
         return clientCommunicator.list(req);
     }
 
-//    public CreateResult create(CreateRequest req){
-//
-//    }
-//
-//    public JoinResult join(JoinRequest req){
-//
-//    }
-//
+    public CreateResult create(CreateRequest req) throws Exception{
+
+    }
+
+    public JoinResult join(JoinRequest req) throws Exception{
+        return clientCommunicator.join(req);
+    }
+
 //    public ClearResult clear(){
 //
 //    }
