@@ -190,4 +190,30 @@ public class ClientCommunicator {
     }
 
 
+
 }
+
+
+/*
+    public JoinResult observe(JoinRequest req) throws Exception{
+        System.out.println("Entering observe CC method");
+
+        var builder = HttpRequest.newBuilder().uri(URI.create(serverUrl + "/game"));
+        builder.header("Authorization", req.authToken());
+        builder.PUT(HttpRequest.BodyPublishers.ofString(gson.toJson(req)));
+
+        HttpRequest request = builder.build();
+
+        var response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+        System.out.println("Status: " + response.statusCode());
+        System.out.println("Body: " + response.body());
+
+        if(response.statusCode() != 200){
+            Map error = gson.fromJson(response.body(), Map.class);
+            throw new Exception((String) error.get("message"));
+        }
+
+        return gson.fromJson(response.body(), JoinResult.class);
+    }
+ */
