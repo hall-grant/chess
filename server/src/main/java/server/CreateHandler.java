@@ -4,8 +4,8 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import dataaccess.DataAccessException;
 import io.javalin.http.Context;
-import service.records.CreateRequest;
-import service.records.CreateResult;
+import records.CreateRequest;
+import records.CreateResult;
 import service.GameService;
 
 import java.util.Map;

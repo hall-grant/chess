@@ -4,8 +4,8 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import dataaccess.DataAccessException;
 import io.javalin.http.Context;
-import service.records.RegisterRequest;
-import service.records.RegisterResult;
+import records.RegisterRequest;
+import records.RegisterResult;
 import service.UserService;
 
 import java.util.Map;

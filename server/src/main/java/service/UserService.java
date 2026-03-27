@@ -4,7 +4,7 @@ import dataaccess.*;
 import model.AuthData;
 import model.UserData;
 import org.mindrot.jbcrypt.BCrypt;
-import service.records.*;
+import records.*;
 
 import java.util.UUID;
 

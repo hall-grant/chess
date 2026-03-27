@@ -5,10 +5,8 @@ import com.google.gson.GsonBuilder;
 import dataaccess.DataAccessException;
 import dataaccess.DatabaseAuthTokenDao;
 import dataaccess.DatabaseGameDao;
-import dataaccess.GameDao;
 import model.AuthData;
 import model.GameData;
-import service.records.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +14,7 @@ import java.util.List;
 
 
 import com.google.gson.Gson; // for testing.
+import records.*;
 
 public class GameService {
 

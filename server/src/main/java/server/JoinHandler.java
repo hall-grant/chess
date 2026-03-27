@@ -5,8 +5,8 @@ import com.google.gson.GsonBuilder;
 import dataaccess.DataAccessException;
 import io.javalin.http.Context;
 import service.GameService;
-import service.records.JoinRequest;
-import service.records.JoinResult;
+import records.JoinRequest;
+import records.JoinResult;
 
 import java.util.Map;
 

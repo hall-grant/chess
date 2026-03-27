@@ -1,4 +1,4 @@
-package service.records;
+package records;
 
 // just for listing games without needing to serialize gameName
 

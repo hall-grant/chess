@@ -3,9 +3,9 @@ package service;
 import dataaccess.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import service.records.CreateRequest;
-import service.records.RegisterRequest;
-import service.records.RegisterResult;
+import records.CreateRequest;
+import records.RegisterRequest;
+import records.RegisterResult;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 

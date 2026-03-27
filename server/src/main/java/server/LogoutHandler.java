@@ -4,8 +4,8 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import dataaccess.DataAccessException;
 import io.javalin.http.Context;
-import service.records.LogoutRequest;
-import service.records.LogoutResult;
+import records.LogoutRequest;
+import records.LogoutResult;
 import service.UserService;
 
 import java.util.Map;
