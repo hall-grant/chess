@@ -1,5 +1,6 @@
 package ui;
 
+import records.LoginRequest;
 import records.RegisterRequest;
 import records.RegisterResult;
 
@@ -81,7 +82,23 @@ public class Client {
 
     private void login() {
         System.out.println("logging in");
-        authToken = "p";
+        try{
+            System.out.print("Username: ");
+            String username = scanner.nextLine();
+
+            System.out.print("Password: ");
+            String password = scanner.nextLine();
+
+            LoginRequest req = new LoginRequest(username, password);
+
+            var res = server.login(req);
+
+            authToken = res.authToken();
+
+            System.out.println("Logged in");
+        } catch(Exception ex){
+            System.out.println(ex.getMessage()); // debugging
+        }
     }
 
     private void register() {

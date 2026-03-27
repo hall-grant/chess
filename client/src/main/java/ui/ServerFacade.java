@@ -15,9 +15,9 @@ public class ServerFacade {
         return clientCommunicator.register(req);
     }
 
-//    public LoginResult login(LoginRequest req){
-//
-//    }
+    public LoginResult login(LoginRequest req) throws Exception{
+        return clientCommunicator.login(req);
+    }
 //
 //    public LogoutResult logout(LogoutRequest req){
 //
