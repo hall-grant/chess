@@ -111,7 +111,21 @@ public class ServerFacadeTests {
 
     @Test
     void joinPositive() throws Exception{
+        var reg = sf.register(new RegisterRequest("join", "pass", "email"));
 
+        var createRes = sf.create(new CreateRequest(reg.authToken(), "game"));
+        var res = sf.join(new JoinRequest(reg.authToken(), createRes.gameID(), "WHITE"));
+
+        assertNotNull(res);
+    }
+
+    @Test
+    void joinNegative() throws Exception{
+        var reg = sf.register(new RegisterRequest("join", "pass", "email"));
+
+        assertThrows(Exception.class, () -> sf.join(new JoinRequest(reg.authToken(), 69, "WHITE")));
+        assertThrows(Exception.class, () -> sf.join(new JoinRequest("no", 1, "WHITE")));
+        assertThrows(Exception.class, () -> sf.join(new JoinRequest(reg.authToken(), 1, "YELLOW")));
     }
 
 
