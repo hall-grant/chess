@@ -15,11 +15,11 @@ public class ChessBoard {
     private final chess.ChessBoard board;
 
 
-    private static final String darkTileColor = SET_BG_COLOR_DARK_WOOD;
-    private static final String lightTileColor = SET_BG_COLOR_LIGHT_WOOD;
+    private static final String DARK_TILE_COLOR = SET_BG_COLOR_DARK_WOOD;
+    private static final String LIGHT_TILE_COLOR = SET_BG_COLOR_LIGHT_WOOD;
 
-    private static final String black = SET_TEXT_COLOR_BLACK;
-    private static final String white = SET_TEXT_COLOR_WHITE;
+    private static final String BLACK = SET_TEXT_COLOR_BLACK;
+    private static final String WHITE = SET_TEXT_COLOR_WHITE;
 
 
     public ChessBoard(ChessGame.TeamColor teamColor, chess.ChessBoard board){
@@ -27,21 +27,6 @@ public class ChessBoard {
         this.board = board;
     }
 
-//    public static void main(String[] args){
-//
-//        var board = new chess.ChessBoard();
-//        board.resetBoard();
-//
-//        var whiteBoard = new ChessBoard(ChessGame.TeamColor.WHITE, board);
-//        var blackBoard = new ChessBoard(ChessGame.TeamColor.BLACK, board);
-//
-//        System.out.println("White:\n");
-//        whiteBoard.draw();
-//
-//        System.out.println("Black:\n");
-//        blackBoard.draw();
-//
-//    }
 
     public void draw(){
         var out = new PrintStream(System.out, true, StandardCharsets.UTF_8);
@@ -116,9 +101,9 @@ public class ChessBoard {
                 }
 
                 if((rowNum + colNum) % 2 == 0){
-                    System.out.print(lightTileColor);
+                    System.out.print(LIGHT_TILE_COLOR);
                 }else{
-                    System.out.print(darkTileColor);
+                    System.out.print(DARK_TILE_COLOR);
                 }
 
                 ChessPiece piece = board.getPiece(new ChessPosition(row, col));
@@ -129,9 +114,9 @@ public class ChessBoard {
                     System.out.print(EMPTY);
                 }else{
                     if(piece.getTeamColor() == ChessGame.TeamColor.WHITE){
-                        System.out.print(white);
+                        System.out.print(WHITE);
                     }else{
-                        System.out.print(black);
+                        System.out.print(BLACK);
                     }
 
                     // pieces are easier to differentiate when not filled in. Always using WHITE_ versions of pieces.

@@ -20,10 +20,6 @@ public class Client {
         server = new ServerFacade(port);
     }
 
-//    public static void main(String[] args){
-//        Client client = new Client(8080);
-//        client.run();
-//    }
 
     private String authToken = null;
 
@@ -351,46 +347,3 @@ public class Client {
         printBoard.draw();
     }
 }
-
-
-/*
-    private void observe() {
-        System.out.println("observing");
-
-        try{
-            if(games == null || games.isEmpty()){
-                System.out.println("Please list games.");
-                return;
-            }
-
-            System.out.print("Enter game ID: ");
-            int gameId;
-
-            try{
-                gameId = Integer.parseInt(scanner.nextLine());
-
-                if(gameId < 1 || gameId > games.size()){
-                    System.out.println("Invalid game ID.");
-                    return;
-                }
-            }catch(Exception ex){
-                System.out.println("Invalid game ID.");
-                return;
-            }
-
-
-            int gameIdReal = games.get(gameId - 1).gameID();
-
-            JoinRequest req = new JoinRequest(authToken, gameIdReal, null);
-
-            var res = server.join(req);
-
-            System.out.println("Observing game " + games.get(gameId - 1).gameName() + " from white's perspective");
-
-            drawBoard(ChessGame.TeamColor.WHITE);
-
-        }catch(Exception ex){
-            System.out.println("Error: Something went wrong");
-        }
-    }
- */
