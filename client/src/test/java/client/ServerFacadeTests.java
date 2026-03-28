@@ -129,6 +129,16 @@ public class ServerFacadeTests {
     }
 
 
+    @Test
+    // idk if this is even required
+    void clearPositive() throws Exception{
+        var reg = sf.register(new RegisterRequest("clear", "pass", "email"));
+
+        sf.clear();
+
+        assertThrows(Exception.class, () -> sf.login(new LoginRequest("clear", "pass")));
+    }
+
 
 
 }
