@@ -78,6 +78,18 @@ public class ServerFacadeTests {
     }
 
 
+    @Test
+    void createPositive() throws Exception{
+        var reg = sf.register(new RegisterRequest("create", "pass", "email"));
+        var res = sf.create(new CreateRequest(reg.authToken(), "game"));
+
+        assertNotNull(res);
+    }
+
+    @Test
+    void createNegative() throws Exception{
+        assertThrows(Exception.class, () -> sf.create(new CreateRequest("no", "no")));
+    }
 
 
 }
