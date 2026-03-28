@@ -20,10 +20,10 @@ public class Client {
         server = new ServerFacade(port);
     }
 
-    public static void main(String[] args){
-        Client client = new Client(8080);
-        client.run();
-    }
+//    public static void main(String[] args){
+//        Client client = new Client(8080);
+//        client.run();
+//    }
 
     private String authToken = null;
 
