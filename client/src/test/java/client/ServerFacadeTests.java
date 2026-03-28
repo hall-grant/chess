@@ -92,4 +92,29 @@ public class ServerFacadeTests {
     }
 
 
+    @Test
+    void listPositive() throws Exception{
+        var reg = sf.register(new RegisterRequest("lsit", "pass", "email"));
+        sf.create(new CreateRequest(reg.authToken(), "game"));
+
+        var res = sf.list(new ListRequest(reg.authToken()));
+
+        assertNotNull(res.games());
+        assertEquals(1, res.games().size());
+    }
+
+    @Test
+    void listNegative() throws Exception{
+        assertThrows(Exception.class, () -> sf.list(new ListRequest("no")));
+    }
+
+
+    @Test
+    void joinPositive() throws Exception{
+
+    }
+
+
+
+
 }
