@@ -42,7 +42,7 @@ public class ServerFacadeTests {
     @Test
     public void registerNegative() throws Exception{
         var req = new RegisterRequest("reg1", "pass", "email");
-        var res = sf.register(req);
+        sf.register(req);
 
         assertThrows(Exception.class, () -> sf.register(req)); // register twice
     }
@@ -61,5 +61,23 @@ public class ServerFacadeTests {
     public void loginNegative() throws Exception{
         assertThrows(Exception.class, () -> sf.login(new LoginRequest("no", "no")));
     }
+
+
+    @Test
+    void logoutPositive() throws Exception{
+        var reg = sf.register(new RegisterRequest("logout1", "pass", "email"));
+
+        var res = sf.logout(new LogoutRequest(reg.authToken()));
+
+        assertNotNull(res);
+    }
+
+    @Test
+    void logoutNegative() throws Exception{
+        assertThrows(Exception.class, () -> sf.logout(new LogoutRequest("no"))); // doesn't exist
+    }
+
+
+
 
 }
