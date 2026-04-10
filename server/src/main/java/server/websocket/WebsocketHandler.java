@@ -105,10 +105,114 @@ public class WebsocketHandler {
     }
 
 
+    private void handleLeave(WsContext ctx, UserGameCommand command){
+
+        if(!gameCtxMap.containsKey(ctx)){
+            sendError(ctx, "Error: not connected");
+            return;
+        }
+        int gameID = gameCtxMap.remove(ctx); // returns value of ctx
+
+        AuthData auth;
+        GameData game;
+        try{
+            auth = authDao.getAuth(command.getAuthToken());
+            game = gameDao.getGame(gameID);
+        }catch(DataAccessException ex){
+            sendError(ctx, "Error: invalid");
+            return;
+        }
+
+        if(auth == null || game == null){
+            sendError(ctx, "Error: invalid.");
+            return;
+        }
+
+        connectionManager.remove(gameID, ctx);
+
+        try{
+            gameDao.updateGame(killPlayer(game, auth.userName()));
+        }catch(DataAccessException ex){
+            sendError(ctx, "Error: couldn't update");
+            return;
+        }
+
+        connectionManager.broadcastExclude(ctx, gameID, new NotificationMessage(auth.userName() + " left"));
+
+    }
+
+
+    private void handleResign(WsContext ctx, UserGameCommand command){
+        if(!gameCtxMap.containsKey(ctx)){
+            sendError(ctx, "Error: not connected");
+            return;
+        }
+        int gameID = gameCtxMap.get(ctx);
+
+        AuthData auth;
+        GameData game;
+
+        try{
+            auth = authDao.getAuth(command.getAuthToken());
+            game = gameDao.getGame(gameID);
+        }catch(DataAccessException ex){
+            sendError(ctx, "Error: invalid");
+            return;
+        }
+
+        if(auth == null || game == null){
+            sendError(ctx, "Error: invalid.");
+            return;
+        }
+
+        // Spec doesn't mention marking game as finished.
+        connectionManager.broadcastAll(gameID, new NotificationMessage(auth.userName() + " resigned"));
+
+    }
+
+
+    private void handleMakeMove(WsContext ctx, UserGameCommand command){
+        if(!gameCtxMap.containsKey(ctx)){
+            sendError(ctx, "Error: not connected");
+            return;
+        }
+        int gameID = gameCtxMap.get(ctx);
+
+        AuthData auth;
+        GameData game;
+
+        try{
+            auth = authDao.getAuth(command.getAuthToken());
+            game = gameDao.getGame(gameID);
+        } catch (DataAccessException ex) {
+            sendError(ctx, "Error: invalid make move");
+            return;
+        }
+
+        if(auth == null || game == null){
+            sendError(ctx, "Error: invalid make move.");
+            return;
+        }
+
+        try{
+            // uh
+        }
+
+    }
+
+
 
     private void sendError(WsContext ctx, String message){
         ErrorMessage error = new ErrorMessage(message);
         ctx.send(gson.toJson(error));
+    }
+
+    private void sendGame(WsContext ctx, GameData game){
+
+    }
+
+    private GameData killPlayer(GameData game, String username){
+
     }
 }
 
