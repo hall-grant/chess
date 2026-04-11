@@ -59,9 +59,11 @@ public class WebsocketHandler {
                 case "CONNECT" -> handleConnect(ctx, gson.fromJson(jObj, UserGameCommand.class));
                 case "LEAVE" -> handleLeave(ctx, gson.fromJson(jObj, UserGameCommand.class));
                 case "RESIGN" -> handleResign(ctx, gson.fromJson(jObj, UserGameCommand.class));
-                case "MAKE_MOVE" -> handleMakeMove(ctx, gson.fromJson(jObj, UserGameCommand.class));
+                case "MAKE_MOVE" -> handleMakeMove(ctx, gson.fromJson(jObj, MoveCommand.class));
                 default -> sendError(ctx, "Error: bad command");
             }
+        } catch (Exception ex) {
+            sendError(ctx, "Error: invalid message");
         }
     }
 
@@ -175,7 +177,7 @@ public class WebsocketHandler {
     }
 
 
-    private void handleMakeMove(WsContext ctx, UserGameCommand command){
+    private void handleMakeMove(WsContext ctx, MoveCommand command){
         if(!gameCtxMap.containsKey(ctx)){
             sendError(ctx, "Error: not connected");
             return;
@@ -199,7 +201,7 @@ public class WebsocketHandler {
         }
 
         ChessGame chessGame = game.chessGame();
-        ChessMove chessMove = grabMove(command);
+        ChessMove chessMove = command.getMove();
         if(chessMove == null){
             sendError(ctx, "Error: no move");
             return;
