@@ -14,17 +14,14 @@ import io.javalin.websocket.*;
 
 import model.AuthData;
 import model.GameData;
-import org.eclipse.jetty.websocket.api.Session;
 import websocket.commands.MoveCommand;
 import websocket.commands.UserGameCommand;
 import websocket.messages.ErrorMessage;
 import websocket.messages.LoadGameMessage;
 import websocket.messages.NotificationMessage;
-import websocket.messages.ServerMessage;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
 
 public class WebsocketHandler {
     private final Gson gson;
@@ -68,7 +65,13 @@ public class WebsocketHandler {
     }
 
 
-    private void handleConnect(WsContext ctx, UserGameCommand command){
+    // I don't see why this is even needed.
+    public void onConnect(WsContext ctx){
+        System.out.println("Websocket connected");
+    }
+
+
+    public void handleConnect(WsContext ctx, UserGameCommand command){
 
         if(command.getAuthToken() == null){
             sendError(ctx, "Error: missing authToken");
@@ -108,6 +111,14 @@ public class WebsocketHandler {
                 command.getGameID(),
                 new NotificationMessage(auth.userName() + " is now connected"));
 
+    }
+
+
+    public void handleClose(WsContext ctx){
+        Integer gameID = gameCtxMap.remove(ctx); // Integer type for nullable, remove returns value of ctx
+        if(gameID != null){
+            connectionManager.remove(gameID, ctx);
+        }
     }
 
 

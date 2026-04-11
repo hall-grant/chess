@@ -4,6 +4,7 @@ import dataaccess.*;
 
 import io.javalin.*;
 
+import server.websocket.WebsocketHandler;
 import service.*;
 
 public class Server {
@@ -49,6 +50,11 @@ public class Server {
 
 
 
+        // websocket
+        WebsocketHandler websocketHandler = new WebsocketHandler(authDao, gameDao);
+
+
+
         // Endpoints
         javalin.delete("/db", ctx -> clearHandler.handle(ctx));         // clear
         javalin.post("/user", ctx -> registerHandler.handle(ctx));      // register
@@ -57,6 +63,14 @@ public class Server {
         javalin.post("/game", ctx -> gameHandler.handle(ctx));          // create
         javalin.get("/game", ctx -> listHandler.handle(ctx));           // list
         javalin.put("/game", ctx -> joinHandler.handle(ctx));           // join
+
+
+        // websocket endpoints
+        javalin.ws("/ws", ws -> {
+            ws.onConnect(ctx -> websocketHandler.onConnect(ctx));
+            ws.onClose(ctx -> websocketHandler.handleClose(ctx));
+            ws.onMessage(ctx -> websocketHandler.handleMessage(ctx));
+        });
 
     }
 
