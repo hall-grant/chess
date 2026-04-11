@@ -6,6 +6,7 @@ import chess.ChessMove;
 import chess.InvalidMoveException;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
 import dataaccess.DataAccessException;
 import dataaccess.DatabaseAuthTokenDao;
 import dataaccess.DatabaseGameDao;
@@ -14,6 +15,7 @@ import io.javalin.websocket.*;
 import model.AuthData;
 import model.GameData;
 import org.eclipse.jetty.websocket.api.Session;
+import websocket.commands.MoveCommand;
 import websocket.commands.UserGameCommand;
 import websocket.messages.ErrorMessage;
 import websocket.messages.LoadGameMessage;
@@ -43,25 +45,23 @@ public class WebsocketHandler {
     }
 
     public void handleMessage(WsMessageContext ctx){
-        UserGameCommand command;
         try{
-            command = gson.fromJson(ctx.message(), UserGameCommand.class);
-
-            if(command == null){
+            // for formatting chessMove within the ctx without jankiness
+            JsonObject jObj = gson.fromJson(ctx.message(), JsonObject.class);
+            if(jObj == null){
                 sendError(ctx, "Error: invalid command");
                 return;
             }
 
-            switch(command.getCommandType()){
-                case CONNECT -> handleConnect(ctx, command);
-                case LEAVE -> handleLeave(ctx, command);
-                case RESIGN -> handleResign(ctx, command);
-                case MAKE_MOVE -> handleMakeMove(ctx, command);
+            String commandType = jObj.get("commandType").getAsString();
+
+            switch(commandType){
+                case "CONNECT" -> handleConnect(ctx, gson.fromJson(jObj, UserGameCommand.class));
+                case "LEAVE" -> handleLeave(ctx, gson.fromJson(jObj, UserGameCommand.class));
+                case "RESIGN" -> handleResign(ctx, gson.fromJson(jObj, UserGameCommand.class));
+                case "MAKE_MOVE" -> handleMakeMove(ctx, gson.fromJson(jObj, UserGameCommand.class));
                 default -> sendError(ctx, "Error: bad command");
             }
-
-        }catch(Exception ex){
-            sendError(ctx, "Error: invalid message");
         }
     }
 
@@ -100,7 +100,7 @@ public class WebsocketHandler {
         gameCtxMap.put(ctx, command.getGameID());
         connectionManager.add(command.getGameID(), ctx);
 
-        sendGame(ctx, game);
+        ctx.send(gson.toJson(new LoadGameMessage(game)));
         connectionManager.broadcastExclude(
                 ctx,
                 command.getGameID(),
@@ -240,13 +240,46 @@ public class WebsocketHandler {
         ctx.send(gson.toJson(error));
     }
 
-    private void sendGame(WsContext ctx, GameData game){
-
-    }
-
     private GameData killPlayer(GameData game, String username){
+        String white = game.whiteUsername();
+        String black = game.blackUsername();
 
+        if (username == null){
+            return game;
+        }
+        if(username.equals(white)){
+            return new GameData(game.gameID(), null, black, game.gameName(), game.chessGame());
+        }
+        if (username.equals(black)) {
+            return new GameData(game.gameID(), white, null, game.gameName(), game.chessGame());
+        }
+        return game;
     }
+
+    private void sendGameNotification(int gameID, GameData game){
+        ChessGame chessGame = game.chessGame();
+
+        // Spec doesn't say to broadcast messages specific to each party
+        if(chessGame.isInCheckmate(ChessGame.TeamColor.WHITE)){
+            connectionManager.broadcastAll(gameID, new NotificationMessage("White is in checkmate."));
+        }
+        else if(chessGame.isInCheckmate(ChessGame.TeamColor.BLACK)){
+            connectionManager.broadcastAll(gameID, new NotificationMessage("Black is in checkmate."));
+        }
+        else if(chessGame.isInStalemate(ChessGame.TeamColor.WHITE)){
+            connectionManager.broadcastAll(gameID, new NotificationMessage("White is in stalemate."));
+        }
+        else if(chessGame.isInStalemate(ChessGame.TeamColor.BLACK)){
+            connectionManager.broadcastAll(gameID, new NotificationMessage("Black is in stalemate."));
+        }
+        else if(chessGame.isInCheck(ChessGame.TeamColor.WHITE)){
+            connectionManager.broadcastAll(gameID, new NotificationMessage("White is in check."));
+        }
+        else if(chessGame.isInCheck(ChessGame.TeamColor.BLACK)){
+            connectionManager.broadcastAll(gameID, new NotificationMessage("Black is in check."));
+        }
+    }
+
 }
 
 
@@ -309,6 +342,34 @@ public class WebsocketHandler {
     private void sendError(WsContext ctx, String message){
         ErrorMessage error = new ErrorMessage(message);
         ctx.send(gson.toJson(error));
+    }
+
+ */
+
+
+/*
+
+public void handleMessage(WsMessageContext ctx){
+        UserGameCommand command;
+        try{
+            command = gson.fromJson(ctx.message(), UserGameCommand.class);
+
+            if(command == null){
+                sendError(ctx, "Error: invalid command");
+                return;
+            }
+
+            switch(command.getCommandType()){
+                case CONNECT -> handleConnect(ctx, command);
+                case LEAVE -> handleLeave(ctx, command);
+                case RESIGN -> handleResign(ctx, command);
+                case MAKE_MOVE -> handleMakeMove(ctx, command);
+                default -> sendError(ctx, "Error: bad command");
+            }
+
+        }catch(Exception ex){
+            sendError(ctx, "Error: invalid message");
+        }
     }
 
  */
