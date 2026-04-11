@@ -1,6 +1,9 @@
 package server.websocket;
 
 
+import chess.ChessGame;
+import chess.ChessMove;
+import chess.InvalidMoveException;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import dataaccess.DataAccessException;
@@ -13,6 +16,7 @@ import model.GameData;
 import org.eclipse.jetty.websocket.api.Session;
 import websocket.commands.UserGameCommand;
 import websocket.messages.ErrorMessage;
+import websocket.messages.LoadGameMessage;
 import websocket.messages.NotificationMessage;
 import websocket.messages.ServerMessage;
 
@@ -194,9 +198,38 @@ public class WebsocketHandler {
             return;
         }
 
-        try{
-            // uh
+        ChessGame chessGame = game.chessGame();
+        ChessMove chessMove = grabMove(command);
+        if(chessMove == null){
+            sendError(ctx, "Error: no move");
+            return;
         }
+
+        try{
+            chessGame.makeMove(chessMove);
+        }catch(InvalidMoveException ex){
+            sendError(ctx, "Error: invalid move");
+            return;
+        }
+
+        GameData newGame = new GameData(
+                game.gameID(),
+                game.whiteUsername(),
+                game.blackUsername(),
+                game.gameName(),
+                chessGame);
+
+        try{
+            gameDao.updateGame(newGame);
+        } catch (DataAccessException ex) {
+            sendError(ctx, "Error: couldn't update game");
+            return;
+        }
+
+        connectionManager.broadcastAll(gameID, new LoadGameMessage(newGame));
+        connectionManager.broadcastExclude(ctx, gameID, new NotificationMessage(auth.userName() + " made move"));
+
+        sendGameNotification(gameID, newGame);
 
     }
 
