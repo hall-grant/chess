@@ -3,6 +3,7 @@ package server.websocket;
 
 import chess.ChessGame;
 import chess.ChessMove;
+import chess.ChessPiece;
 import chess.InvalidMoveException;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -65,7 +66,7 @@ public class WebsocketHandler {
     }
 
 
-    // I don't see why this is even needed.
+    // I don't see why this is even needed. Doesn't do anything.
     public void onConnect(WsContext ctx){
         System.out.println("Websocket connected");
     }
@@ -182,7 +183,14 @@ public class WebsocketHandler {
             return;
         }
 
-        // Spec doesn't mention marking game as finished.
+        // make sure observers can't resign
+        if(!auth.userName().equals(game.whiteUsername()) && !auth.userName().equals(game.blackUsername())){
+            sendError(ctx,"Error: observer can't resign");
+            return;
+        }
+
+
+
         connectionManager.broadcastAll(gameID, new NotificationMessage(auth.userName() + " resigned"));
 
     }
@@ -211,12 +219,55 @@ public class WebsocketHandler {
             return;
         }
 
+        // make sure observers can't make moves
+        if(!auth.userName().equals(game.whiteUsername()) && !auth.userName().equals(game.blackUsername())){
+            sendError(ctx,"Error: observer can't make moves");
+            return;
+        }
+
+        // make sure correct turn
+        if(auth.userName().equals(game.whiteUsername())){
+            if(game.chessGame().getTeamTurn() != ChessGame.TeamColor.WHITE){
+                sendError(ctx, "Error: incorrect turn");
+                return;
+            }
+        }else{
+            if(game.chessGame().getTeamTurn() != ChessGame.TeamColor.BLACK){
+                sendError(ctx, "Error: incorrect turn");
+                return;
+            }
+        }
+
+
+
         ChessGame chessGame = game.chessGame();
         ChessMove chessMove = command.getMove();
         if(chessMove == null){
             sendError(ctx, "Error: no move");
             return;
         }
+
+        // make sure not moving opponent piece or no piece
+        ChessPiece piece = game.chessGame().getBoard().getPiece(chessMove.getStartPosition());
+        ChessGame.TeamColor pColor;
+        if(auth.userName().equals(game.whiteUsername())){
+            pColor = ChessGame.TeamColor.WHITE;
+        } else {
+            pColor = ChessGame.TeamColor.BLACK;
+        }
+        if(piece == null || piece.getTeamColor() != pColor){
+            sendError(ctx, "Error: can't move opponent's piece or no piece");
+            return;
+        }
+
+        if (chessGame.isInCheckmate(ChessGame.TeamColor.WHITE) ||
+                chessGame.isInCheckmate(ChessGame.TeamColor.BLACK) ||
+                chessGame.isInStalemate(ChessGame.TeamColor.WHITE) ||
+                chessGame.isInStalemate(ChessGame.TeamColor.BLACK)) {
+            sendError(ctx, "Error: game over");
+            return;
+        }
+
 
         try{
             chessGame.makeMove(chessMove);
@@ -242,7 +293,7 @@ public class WebsocketHandler {
         connectionManager.broadcastAll(gameID, new LoadGameMessage(newGame));
         connectionManager.broadcastExclude(ctx, gameID, new NotificationMessage(auth.userName() + " made move"));
 
-        sendGameNotification(gameID, newGame);
+        // sendGameNotification(gameID, newGame);
 
     }
 
