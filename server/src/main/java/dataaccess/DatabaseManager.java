@@ -1,5 +1,6 @@
 package dataaccess;
 
+import javax.swing.plaf.nimbus.State;
 import java.sql.*;
 import java.util.Properties;
 
@@ -117,13 +118,27 @@ public class DatabaseManager {
                 whiteUsername VARCHAR(255),
                 blackUsername VARCHAR(255),
                 gameName VARCHAR(255) NOT NULL,
-                game TEXT NOT NULL)
+                game TEXT NOT NULL,
+                gameOver BOOLEAN NOT NULL DEFAULT FALSE)
                 """; // game should probably be a TEXT
         try (Connection connection = getConnection();
         Statement statement = connection.createStatement()){
             statement.executeUpdate(command);
         }catch(SQLException ex){
             throw new DataAccessException("Creation of games table failed", ex);
+        }
+    }
+
+    // for testing/resetting
+    public static void deleteDatabase() throws DataAccessException{
+        try (Connection connection = getConnection()){
+            Statement statement = connection.createStatement();
+
+            statement.executeUpdate("DROP TABLE IF EXISTS games");
+            statement.executeUpdate("DROP TABLE IF EXISTS authTokens");
+            statement.executeUpdate("DROP TABLE IF EXISTS users");
+        }catch(SQLException ex){
+            throw new DataAccessException("Clearing tables failed", ex);
         }
     }
 

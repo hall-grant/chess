@@ -189,6 +189,28 @@ public class WebsocketHandler {
             return;
         }
 
+        // check if game is already resigned
+        if(game.gameOver()){
+            sendError(ctx, "Error: game already resigned");
+            return;
+        }
+
+
+        // actually set game to gameOver
+        ChessGame chessGame = game.chessGame();
+        GameData newGame = new GameData(
+                game.gameID(),
+                game.whiteUsername(),
+                game.blackUsername(),
+                game.gameName(),
+                chessGame, true);
+
+        try{
+            gameDao.updateGame(newGame);
+        }catch(DataAccessException ex){
+            sendError(ctx, "Error: couldn't update game");
+            return;
+        }
 
 
         connectionManager.broadcastAll(gameID, new NotificationMessage(auth.userName() + " resigned"));
@@ -238,6 +260,11 @@ public class WebsocketHandler {
             }
         }
 
+        if(game.gameOver()){
+            sendError(ctx, "Error: game already resigned");
+            return;
+        }
+
 
 
         ChessGame chessGame = game.chessGame();
@@ -260,13 +287,13 @@ public class WebsocketHandler {
             return;
         }
 
-        if (chessGame.isInCheckmate(ChessGame.TeamColor.WHITE) ||
-                chessGame.isInCheckmate(ChessGame.TeamColor.BLACK) ||
-                chessGame.isInStalemate(ChessGame.TeamColor.WHITE) ||
-                chessGame.isInStalemate(ChessGame.TeamColor.BLACK)) {
-            sendError(ctx, "Error: game over");
-            return;
-        }
+//        if (chessGame.isInCheckmate(ChessGame.TeamColor.WHITE) ||
+//                chessGame.isInCheckmate(ChessGame.TeamColor.BLACK) ||
+//                chessGame.isInStalemate(ChessGame.TeamColor.WHITE) ||
+//                chessGame.isInStalemate(ChessGame.TeamColor.BLACK)) {
+//            sendError(ctx, "Error: game over");
+//            return;
+//        }
 
 
         try{
@@ -281,7 +308,7 @@ public class WebsocketHandler {
                 game.whiteUsername(),
                 game.blackUsername(),
                 game.gameName(),
-                chessGame);
+                chessGame, false);
 
         try{
             gameDao.updateGame(newGame);
@@ -312,10 +339,10 @@ public class WebsocketHandler {
             return game;
         }
         if(username.equals(white)){
-            return new GameData(game.gameID(), null, black, game.gameName(), game.chessGame());
+            return new GameData(game.gameID(), null, black, game.gameName(), game.chessGame(), false);
         }
         if (username.equals(black)) {
-            return new GameData(game.gameID(), white, null, game.gameName(), game.chessGame());
+            return new GameData(game.gameID(), white, null, game.gameName(), game.chessGame(), false);
         }
         return game;
     }

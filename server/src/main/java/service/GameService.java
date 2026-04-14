@@ -37,7 +37,7 @@ public class GameService {
             throw new DataAccessException("bad request");
         }
 
-        GameData nGame = new GameData(0, null, null, r.gameName(), new ChessGame());
+        GameData nGame = new GameData(0, null, null, r.gameName(), new ChessGame(), false);
 
         int gameID = gameDao.createGame(nGame); // returns gameID from database
 
@@ -87,7 +87,7 @@ public class GameService {
                 throw new DataAccessException("already taken");
             }
             AuthData auth = authDao.getAuth(r.authToken());
-            gameResult = new GameData(game.gameID(), auth.userName(), game.blackUsername(), game.gameName(), game.chessGame());
+            gameResult = new GameData(game.gameID(), auth.userName(), game.blackUsername(), game.gameName(), game.chessGame(), false);
 
         } else{
 
@@ -95,7 +95,7 @@ public class GameService {
                 throw new DataAccessException("already taken");
             }
             AuthData auth = authDao.getAuth(r.authToken());
-            gameResult = new GameData(game.gameID(), game.whiteUsername(), auth.userName(), game.gameName(), game.chessGame());
+            gameResult = new GameData(game.gameID(), game.whiteUsername(), auth.userName(), game.gameName(), game.chessGame(), false);
 
         }
 

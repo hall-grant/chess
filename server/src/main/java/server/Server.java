@@ -77,6 +77,7 @@ public class Server {
     public int run(int desiredPort) {
 
         try {
+            // DatabaseManager.deleteDatabase();
             DatabaseManager.createDatabase();
 
             DatabaseManager.createUserTable();

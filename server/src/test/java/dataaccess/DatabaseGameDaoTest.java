@@ -3,7 +3,6 @@ package dataaccess;
 import chess.ChessGame;
 import chess.ChessMove;
 import chess.ChessPosition;
-import model.AuthData;
 import model.GameData;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -35,7 +34,7 @@ public class DatabaseGameDaoTest {
     @Test
     void createGamePositive() throws DataAccessException{
 
-        GameData game = new GameData(0, null, null, "game", new ChessGame());
+        GameData game = new GameData(0, null, null, "game", new ChessGame(), false);
 
         int gameID = gameDao.createGame(game);
 
@@ -49,7 +48,7 @@ public class DatabaseGameDaoTest {
     // negative
     @Test
     void createGameNegative(){
-        GameData game = new GameData(0, null, null, null, new ChessGame());
+        GameData game = new GameData(0, null, null, null, new ChessGame(), false);
 
         assertThrows(DataAccessException.class, () -> gameDao.createGame(game));
     }
@@ -60,7 +59,7 @@ public class DatabaseGameDaoTest {
     @Test
     void getGamePositive() throws DataAccessException{
 
-        GameData game = new GameData(0, null, null, "CodeQuality", new ChessGame());
+        GameData game = new GameData(0, null, null, "CodeQuality", new ChessGame(), false);
 
         int gameID = gameDao.createGame(game);
 
@@ -88,8 +87,8 @@ public class DatabaseGameDaoTest {
     @Test
     void listGamesPositive() throws DataAccessException{
 
-        gameDao.createGame(new GameData(0, null, null, "game1", new ChessGame()));
-        gameDao.createGame(new GameData(0, null, null, "game2", new ChessGame()));
+        gameDao.createGame(new GameData(0, null, null, "game1", new ChessGame(), false));
+        gameDao.createGame(new GameData(0, null, null, "game2", new ChessGame(), false));
 
         List<GameData> games = gameDao.listGames();
 
@@ -113,7 +112,7 @@ public class DatabaseGameDaoTest {
     @Test
     void updateGamePositive() throws DataAccessException{
 
-        int gameID = gameDao.createGame(new GameData(0, null, null, "game", new ChessGame()));
+        int gameID = gameDao.createGame(new GameData(0, null, null, "game", new ChessGame(), false));
 
         GameData game = gameDao.getGame(gameID);
 
@@ -122,7 +121,7 @@ public class DatabaseGameDaoTest {
                 "white",
                 "black",
                 game.gameName(),
-                game.chessGame());
+                game.chessGame(), false);
 
 
         gameDao.updateGame(updated);
@@ -141,7 +140,7 @@ public class DatabaseGameDaoTest {
 
         ChessGame game = new ChessGame();
 
-        int gameID = gameDao.createGame(new GameData(0, null, null, "game", game));
+        int gameID = gameDao.createGame(new GameData(0, null, null, "game", game, false));
 
         GameData newGame = gameDao.getGame(gameID);
 
@@ -164,7 +163,7 @@ public class DatabaseGameDaoTest {
                 newGame.whiteUsername(),
                 newGame.blackUsername(),
                 newGame.gameName(),
-                board);
+                board, false);
 
         gameDao.updateGame(updatedGame);
 
@@ -177,7 +176,7 @@ public class DatabaseGameDaoTest {
     @Test
     void updateGameNegative(){
 
-        GameData game = new GameData(12345, "white", "black", "game", new ChessGame());
+        GameData game = new GameData(12345, "white", "black", "game", new ChessGame(), false);
 
         assertThrows(DataAccessException.class, () -> gameDao.updateGame(game));
 
@@ -188,7 +187,7 @@ public class DatabaseGameDaoTest {
     @Test
     void clearGamesPositive() throws DataAccessException{
 
-        gameDao.createGame(new GameData(0, null, null, "game", new ChessGame()));
+        gameDao.createGame(new GameData(0, null, null, "game", new ChessGame(), false));
 
         ClearService clearService = new ClearService(userDao, authDao, gameDao);
         clearService.clear();

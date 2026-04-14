@@ -3,17 +3,12 @@ package dataaccess;
 import chess.ChessGame;
 import com.google.gson.GsonBuilder;
 import model.GameData;
-import model.UserData;
 
 import com.google.gson.Gson;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.HashMap;
-
-import java.sql.Types.*;
 
 import static java.sql.Types.VARCHAR;
 
@@ -25,7 +20,7 @@ public class DatabaseGameDao {
         String gameCode = gson.toJson(gameData.chessGame()); // serialize
 
         // shouldn't assign gameIDs
-        String command = "INSERT INTO games(whiteUsername, blackUsername, gameName, game) VALUES (?, ?, ?, ?)";
+        String command = "INSERT INTO games(whiteUsername, blackUsername, gameName, game, gameOver) VALUES (?, ?, ?, ?, ?)";
 
         // stack overflow never fails, right?
         // use prepared statement to fix all the errors with string concatenation
@@ -47,6 +42,7 @@ public class DatabaseGameDao {
 
             statement.setString(3, gameData.gameName());
             statement.setString(4, gson.toJson(gameData.chessGame()));
+            statement.setBoolean(5, gameData.gameOver());
 
             statement.executeUpdate();
 
@@ -64,7 +60,7 @@ public class DatabaseGameDao {
     }
 
     public GameData getGame(int gameID) throws DataAccessException{
-        String command = "SELECT gameID, whiteUsername, blackUsername, gameName, game FROM games WHERE gameID = "
+        String command = "SELECT gameID, whiteUsername, blackUsername, gameName, game, gameOver FROM games WHERE gameID = "
                 + gameID;
 
         try(Connection connection = DatabaseManager.getConnection();
@@ -79,7 +75,9 @@ public class DatabaseGameDao {
 
                 ChessGame game = gson.fromJson(resultSet.getString("game"), ChessGame.class);
 
-                return new GameData(gID, whiteUsername, blackUsername, name, game);
+                boolean gameOver = resultSet.getBoolean("gameOver");
+
+                return new GameData(gID, whiteUsername, blackUsername, name, game, gameOver);
             }
             throw new DataAccessException("Game with gameID doesn't exist");
 
@@ -91,7 +89,7 @@ public class DatabaseGameDao {
     public List<GameData> listGames() throws DataAccessException{
         List<GameData> gameList = new ArrayList<>();
 
-        String command = "SELECT gameID, whiteUsername, blackUsername, gameName, game FROM games";
+        String command = "SELECT gameID, whiteUsername, blackUsername, gameName, game, gameOver FROM games";
 
         try(Connection connection = DatabaseManager.getConnection();
         PreparedStatement statement = connection.prepareStatement(command);
@@ -110,7 +108,10 @@ public class DatabaseGameDao {
                 } else {
                     game = gson.fromJson(gameCode, ChessGame.class);
                 }
-                gameList.add(new GameData(gID, whiteUsername, blackUsername, name, game));
+
+                boolean gameOver = resultSet.getBoolean("gameOver");
+
+                gameList.add(new GameData(gID, whiteUsername, blackUsername, name, game, gameOver));
             }
 
             return gameList;
@@ -124,7 +125,7 @@ public class DatabaseGameDao {
 
     public void updateGame(GameData game) throws DataAccessException{
 
-        String command = "UPDATE games SET whiteUsername = ?, blackUsername = ?, gameName = ?, game = ? WHERE gameID = ?";
+        String command = "UPDATE games SET whiteUsername = ?, blackUsername = ?, gameName = ?, game = ?, gameOver = ? WHERE gameID = ?";
 
         try(Connection connection = DatabaseManager.getConnection();
         PreparedStatement statement = connection.prepareStatement(command)){
@@ -143,7 +144,8 @@ public class DatabaseGameDao {
 
             statement.setString(3, game.gameName());
             statement.setString(4, gson.toJson(game.chessGame()));
-            statement.setInt(5, game.gameID());
+            statement.setBoolean(5, game.gameOver());
+            statement.setInt(6, game.gameID());
 
             if(statement.executeUpdate() <= 0){
                 throw new DataAccessException("Game doesn't exist");
