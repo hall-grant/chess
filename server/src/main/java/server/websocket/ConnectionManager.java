@@ -57,7 +57,7 @@ public class ConnectionManager {
         String string = gson.toJson(message);
         for (var c : set){
             if(c.session.isOpen()){
-                if(c != ctx){
+                if(!c.equals(ctx)){ // c != ctx
                     c.send(string);
                 }
             }

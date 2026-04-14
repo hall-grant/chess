@@ -317,10 +317,17 @@ public class WebsocketHandler {
             return;
         }
 
-        connectionManager.broadcastAll(gameID, new LoadGameMessage(newGame));
-        connectionManager.broadcastExclude(ctx, gameID, new NotificationMessage(auth.userName() + " made move"));
+        // connectionManager.broadcastAll(gameID, new LoadGameMessage(newGame));
+        // connectionManager.broadcastExclude(ctx, gameID, new LoadGameMessage(auth.userName() + " made move"));
 
         // sendGameNotification(gameID, newGame);
+
+        ctx.send(gson.toJson(new LoadGameMessage(newGame)));
+
+        connectionManager.broadcastExclude(ctx, gameID, new LoadGameMessage(newGame));
+        connectionManager.broadcastExclude(ctx, gameID, new NotificationMessage(auth.userName() + " made move"));
+
+        sendGameNotification(gameID, newGame);
 
     }
 
