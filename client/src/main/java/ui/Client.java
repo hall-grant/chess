@@ -212,6 +212,7 @@ public class Client {
         drawBoard(ChessGame.TeamColor.WHITE);
 
 
+
     }
 
     private void logout() {

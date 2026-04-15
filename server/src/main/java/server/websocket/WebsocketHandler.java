@@ -287,13 +287,6 @@ public class WebsocketHandler {
             return;
         }
 
-//        if (chessGame.isInCheckmate(ChessGame.TeamColor.WHITE) ||
-//                chessGame.isInCheckmate(ChessGame.TeamColor.BLACK) ||
-//                chessGame.isInStalemate(ChessGame.TeamColor.WHITE) ||
-//                chessGame.isInStalemate(ChessGame.TeamColor.BLACK)) {
-//            sendError(ctx, "Error: game over");
-//            return;
-//        }
 
 
         try{
@@ -317,10 +310,6 @@ public class WebsocketHandler {
             return;
         }
 
-        // connectionManager.broadcastAll(gameID, new LoadGameMessage(newGame));
-        // connectionManager.broadcastExclude(ctx, gameID, new LoadGameMessage(auth.userName() + " made move"));
-
-        // sendGameNotification(gameID, newGame);
 
         ctx.send(gson.toJson(new LoadGameMessage(newGame)));
 
@@ -380,94 +369,3 @@ public class WebsocketHandler {
 
 }
 
-
-
-
-
-
-
-/*
-
-
-    public WebsocketHandler(){
-        this.cons = new ConnectionManager();
-        this.gson = new GsonBuilder().serializeNulls().create();
-    }
-
-    public void handleConnect(WsContext ctx){
-        System.out.println("Websocket connected");
-        // ctx.enableAutomaticPings();
-    }
-
-    public void handleClose(WsContext ctx){
-        System.out.println("Websocket closed");
-    }
-
-    public void handleMessage(WsMessageContext ctx){
-        try{
-            UserGameCommand command = gson.fromJson(ctx.message(), UserGameCommand.class);
-
-            if(command == null){
-                // send error
-                sendError(ctx, "Error: invalid");
-                return;
-            }
-            switch(command.getCommandType()){
-                case CONNECT:
-                    handleConnectCommand(ctx, command);
-            }
-
-        }
-    }
-
-
-
-    private void handleConnectCommand(WsContext ctx, UserGameCommand command){
-
-        Integer gameID = command.getGameID();
-        if(gameID == null){
-            sendError(ctx, "Error: invalid gameID");
-            return;
-        }
-
-
-
-
-    }
-
-
-
-    private void sendError(WsContext ctx, String message){
-        ErrorMessage error = new ErrorMessage(message);
-        ctx.send(gson.toJson(error));
-    }
-
- */
-
-
-/*
-
-public void handleMessage(WsMessageContext ctx){
-        UserGameCommand command;
-        try{
-            command = gson.fromJson(ctx.message(), UserGameCommand.class);
-
-            if(command == null){
-                sendError(ctx, "Error: invalid command");
-                return;
-            }
-
-            switch(command.getCommandType()){
-                case CONNECT -> handleConnect(ctx, command);
-                case LEAVE -> handleLeave(ctx, command);
-                case RESIGN -> handleResign(ctx, command);
-                case MAKE_MOVE -> handleMakeMove(ctx, command);
-                default -> sendError(ctx, "Error: bad command");
-            }
-
-        }catch(Exception ex){
-            sendError(ctx, "Error: invalid message");
-        }
-    }
-
- */

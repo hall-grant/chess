@@ -129,17 +129,5 @@ public class DatabaseManager {
         }
     }
 
-    // for testing/resetting
-    public static void deleteDatabase() throws DataAccessException{
-        try (Connection connection = getConnection()){
-            Statement statement = connection.createStatement();
-
-            statement.executeUpdate("DROP TABLE IF EXISTS games");
-            statement.executeUpdate("DROP TABLE IF EXISTS authTokens");
-            statement.executeUpdate("DROP TABLE IF EXISTS users");
-        }catch(SQLException ex){
-            throw new DataAccessException("Clearing tables failed", ex);
-        }
-    }
 
 }
