@@ -266,7 +266,6 @@ public class WebsocketHandler {
         }
 
 
-
         ChessGame chessGame = game.chessGame();
         ChessMove chessMove = command.getMove();
         if(chessMove == null){
@@ -288,7 +287,6 @@ public class WebsocketHandler {
         }
 
 
-
         try{
             chessGame.makeMove(chessMove);
         }catch(InvalidMoveException ex){
@@ -296,8 +294,7 @@ public class WebsocketHandler {
             return;
         }
 
-        GameData newGame = new GameData(
-                game.gameID(),
+        GameData newGame = new GameData(game.gameID(),
                 game.whiteUsername(),
                 game.blackUsername(),
                 game.gameName(),
